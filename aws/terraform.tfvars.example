@@ -1,0 +1,8 @@
+# AWS Access Key
+aws_access_key = "..."
+
+# AWS Secret Key
+aws_secret_key = "..."
+
+# Add a windows node to the workload cluster
+add_windows_node = false
