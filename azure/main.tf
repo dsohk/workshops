@@ -138,9 +138,9 @@ resource "azurerm_linux_virtual_machine" "rancher_server" {
 
 # ssh command file for Rancher Server VM
 resource "local_file" "ssh_to_rancher_server" {
-  filename          = "${path.module}/ssh_rancher_server.sh"
-  content  = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${azurerm_linux_virtual_machine.rancher_server.public_ip_address}"])
-  file_permission   = "0755"
+  filename        = "${path.module}/ssh_rancher_server.sh"
+  content         = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${azurerm_linux_virtual_machine.rancher_server.public_ip_address}"])
+  file_permission = "0755"
 }
 
 

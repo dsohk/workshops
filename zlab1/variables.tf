@@ -32,6 +32,12 @@ variable "prefix" {
   default     = "lab"
 }
 
+variable "resource_group_name" {
+  type        = string
+  description = "Resource Group Name"
+  default     = "attendee1"
+}
+
 variable "tag_owner" {
   type        = string
   description = "Owner for the resource (as tag)"
@@ -66,4 +72,10 @@ variable "add_windows_node" {
 # Local variables used to reduce repetition
 locals {
   node_username = "azureuser"
+}
+
+variable "no_of_downstream_clusters" {
+  type        = number
+  description = "Specify number of All In One RKE2 clusters"
+  default     = 2
 }

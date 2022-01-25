@@ -9,3 +9,4 @@ provider "azurerm" {
 
 provider "tls" {
 }
+

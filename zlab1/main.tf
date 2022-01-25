@@ -19,7 +19,7 @@ resource "local_file" "ssh_public_key_openssh" {
 
 # Resource group containing all resources
 resource "azurerm_resource_group" "rancher" {
-  name     = "${var.prefix}-scenario1"
+  name     = "${var.prefix}-${var.resource_group_name}"
   location = var.azure_location
 
   tags = {
@@ -168,21 +168,13 @@ module "rancher_server" {
   windows_prefered_cluster = var.add_windows_node
 }
 
-# ----------------------------------------------------------------
-# Create downstream RKE2 cluster in Rancher UI
-# ----------------------------------------------------------------
-module "rke2" {
-  source              = "../rke2"
-  rancher_server_dns  = join(".", ["rancher", azurerm_linux_virtual_machine.rancher_server.public_ip_address, "sslip.io"])
-  rancher_admin_token = module.rancher_server.rancher_admin_token
-  cluster_name        = "rke2"
-}
 
 # ----------------------------------------------------------------
 # Create RKE2 downstream cluster
 # ----------------------------------------------------------------
 
-# Azure subnet for rancher server
+
+# Azure subnet for RKE2 clusters
 resource "azurerm_subnet" "rke2-subnet" {
   name                 = "rke2-subnet"
   resource_group_name  = azurerm_resource_group.rancher.name
@@ -190,9 +182,33 @@ resource "azurerm_subnet" "rke2-subnet" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+# ----------------------------------------------------------------
+# Create downstream RKE2 cluster in Rancher UI
+# ----------------------------------------------------------------
+
+provider "rancher2" {
+  alias = "admin"
+
+  api_url  = module.rancher_server.rancher_url
+  insecure = true
+  # ca_certs  = data.kubernetes_secret.rancher_cert.data["ca.crt"]
+  token_key = module.rancher_server.rancher_admin_token
+}
+
+resource "rancher2_cluster_v2" "rke2_clusters" {
+  count                                    = var.no_of_downstream_clusters
+  provider                                 = rancher2.admin
+  name                                     = format("rke2-cluster%d", count.index + 1)
+  kubernetes_version                       = "v1.21.4+rke2r2"
+  enable_network_policy                    = false
+  default_cluster_role_for_project_members = "user"
+}
+
+
 # Public IP of Rancher server
-resource "azurerm_public_ip" "rke2-node1-pip" {
-  name                = "rke2-node1-pip"
+resource "azurerm_public_ip" "rke2-nodes-pip" {
+  count               = var.no_of_downstream_clusters
+  name                = format("rke2-node%d-pip", count.index + 1)
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
   allocation_method   = "Dynamic"
@@ -200,19 +216,21 @@ resource "azurerm_public_ip" "rke2-node1-pip" {
   tags = {
     Owner = var.tag_owner
   }
+
 }
 
 # Azure network interface for rancher server
-resource "azurerm_network_interface" "rke2-node1-nic" {
-  name                = "rke2-node1-nic"
+resource "azurerm_network_interface" "rke2-nodes-nic" {
+  count               = var.no_of_downstream_clusters
+  name                = format("rke2-node%d-nic", count.index + 1)
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
 
   ip_configuration {
-    name                          = "rke2-node1_ip_config"
+    name                          = format("rke2-node%d_ip_config", count.index + 1)
     subnet_id                     = azurerm_subnet.rke2-subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.rke2-node1-pip.id
+    public_ip_address_id          = azurerm_public_ip.rke2-nodes-pip[count.index].id
   }
 
   tags = {
@@ -221,12 +239,13 @@ resource "azurerm_network_interface" "rke2-node1-nic" {
 }
 
 # Azure linux virtual machine for RKE2 node
-resource "azurerm_linux_virtual_machine" "rke2_node1" {
-  name                  = "${var.prefix}-rke2-node1"
-  computer_name         = "rke2-node1" // ensure computer_name meets 15 character limit
+resource "azurerm_linux_virtual_machine" "rke2_node" {
+  count                 = var.no_of_downstream_clusters
+  name                  = format("${var.prefix}-rke2-node%d", count.index + 1)
+  computer_name         = format("rke2-node%d", count.index + 1) // ensure computer_name meets 15 character limit
   location              = azurerm_resource_group.rancher.location
   resource_group_name   = azurerm_resource_group.rancher.name
-  network_interface_ids = [azurerm_network_interface.rke2-node1-nic.id]
+  network_interface_ids = [azurerm_network_interface.rke2-nodes-nic[count.index].id]
   size                  = var.instance_type
   admin_username        = local.node_username
 
@@ -234,7 +253,7 @@ resource "azurerm_linux_virtual_machine" "rke2_node1" {
     templatefile(
       join("/", [path.module, "files/rke2_node.template"]),
       {
-        register_command = module.rke2.custom_cluster_command
+        register_command = rancher2_cluster_v2.rke2_clusters[count.index].cluster_registration_token.0.insecure_node_command
       }
     )
   )

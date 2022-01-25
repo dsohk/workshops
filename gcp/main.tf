@@ -84,9 +84,9 @@ resource "google_compute_instance" "rancher_server" {
 
 # ssh command file for Rancher Server VM
 resource "local_file" "ssh_to_rancher_server" {
-  filename          = "${path.module}/ssh_rancher_server.sh"
-  content  = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${google_compute_instance.rancher_server.network_interface.0.access_config.0.nat_ip}"])
-  file_permission   = "0755"
+  filename        = "${path.module}/ssh_rancher_server.sh"
+  content         = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${google_compute_instance.rancher_server.network_interface.0.access_config.0.nat_ip}"])
+  file_permission = "0755"
 }
 
 # Rancher bootstrap password

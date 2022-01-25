@@ -3,11 +3,10 @@ output "rancher_server_url" {
 }
 
 output "rancher_server_ip" {
-  value = azurerm_linux_virtual_machine.rancher_server.public_ip_address
+  value = aws_instance.rancher_server.public_ip
 }
 
 output "rancher_server_bootstrap_password" {
   value     = random_password.rancher_server_password.result
   sensitive = true
 }
-
