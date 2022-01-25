@@ -3,11 +3,7 @@ output "rancher_server_url" {
 }
 
 output "rancher_server_ip" {
-  value = aws_instance.rancher_server.public_ip
-}
-
-output "rancher_server_sshcmd" {
-  value = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "ec2-user@${aws_instance.rancher_server.public_ip}"])
+  value = google_compute_instance.rancher_server.network_interface.0.access_config.0.nat_ip
 }
 
 output "rancher_server_bootstrap_password" {

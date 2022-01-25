@@ -14,6 +14,7 @@ crash.log
 # version control.
 #
 # example.tfvars
+terraform.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
@@ -28,3 +29,9 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+
+# ssh files
+id_rsa
+id_rsa.pub
+kube_config_server.yaml
+ssh_rancher_server.sh

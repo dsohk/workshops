@@ -124,6 +124,13 @@ resource "aws_instance" "rancher_server" {
   }
 }
 
+# ssh command file for Rancher Server VM
+resource "local_file" "ssh_to_rancher_server" {
+  filename          = "${path.module}/ssh_rancher_server.sh"
+  content  = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${aws_instance.rancher_server.public_ip}"])
+  file_permission   = "0755"
+}
+
 # Rancher bootstrap password
 resource "random_password" "rancher_server_password" {
   length           = 16
