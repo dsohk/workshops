@@ -1,0 +1,9 @@
+# GCO-presales-apj
+azure_subscription_id = ""
+azure_tenant_id       = ""
+azure_client_id       = ""
+azure_client_secret   = ""
+azure_location        = "Central India"
+tag_owner             = "Expert1"
+prefix                = "apj"
+resource_group_name   = "attendee1"

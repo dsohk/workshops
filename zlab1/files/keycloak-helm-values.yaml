@@ -1,0 +1,25 @@
+extraEnv: |
+  - name: KEYCLOAK_LOGLEVEL
+    value: DEBUG
+  - name: KEYCLOAK_USER
+    value: admin
+  - name: KEYCLOAK_PASSWORD
+    value: ${keycloak_admin_password}
+  - name: PROXY_ADDRESS_FORWARDING
+    value: "true"
+
+postgresql:
+  enabled: false
+  postgresqlPassword: postgresqlsecret
+
+ingress:
+  enabled: true
+  rules:
+    - host: ${keycloak_fqdn}
+      paths:
+        - path: /
+          pathType: Prefix
+
+args:
+  - -Dkeycloak.profile.feature.docker=enabled
+

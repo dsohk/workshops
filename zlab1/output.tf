@@ -11,3 +11,11 @@ output "rancher_server_bootstrap_password" {
   sensitive = true
 }
 
+output "keycloak_url" {
+  value = format("https://%s", join(".", ["keycloak", "${azurerm_linux_virtual_machine.rancher_server.public_ip_address}", "sslip.io"]))
+}
+
+output "keycloak_admin_password" {
+  value     = random_password.keycloak_admin_password.result
+  sensitive = true
+}
