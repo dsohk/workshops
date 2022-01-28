@@ -10,7 +10,7 @@ extraEnv: |
 
 postgresql:
   enabled: false
-  postgresqlPassword: postgresqlsecret
+  postgresqlPassword: secret
 
 ingress:
   enabled: true
