@@ -93,5 +93,5 @@ locals {
 variable "no_of_downstream_clusters" {
   type        = number
   description = "Specify number of All In One RKE2 clusters"
-  default     = 1
+  default     = 2
 }

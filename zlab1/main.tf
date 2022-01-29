@@ -302,9 +302,6 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
       "echo 'Waiting for cloud-init to complete...'",
       "cloud-init status --wait > /dev/null",
       "echo 'Completed cloud-init!'",
-      "zypper in -q -y jq",
-      "export PUBLIC_IP=`curl -s -H Metadata:true --noproxy '*' 'http://169.254.169.254/metadata/instance/network?api-version=2017-08-01' | jq -r '.interface[0].ipv4.ipAddress[].publicIpAddress'`",
-      "export PRIVATE_IP=`curl -s -H Metadata:true --noproxy '*' 'http://169.254.169.254/metadata/instance/network?api-version=2017-08-01' | jq -r '.interface[0].ipv4.ipAddress[].privateIpAddress'`",
       format("%s --etcd --controlplane --worker", rancher2_cluster_v2.rke2_clusters[count.index].cluster_registration_token.0.insecure_node_command)
     ]
 

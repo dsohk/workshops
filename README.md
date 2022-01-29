@@ -27,6 +27,15 @@ You will learn how to ...
 * configure Rancher Server to have Keycloak as IdP for single-sign on.
 * enable audit logging and forward all the logs to a EFK cluster.
 
+This lab runs on Microsoft Azure. Please login to your Azure Portal and open Cloud Shell. At the bash terminal in the Cloud Shell, run the following commands to start the lab.
+
+```
+git clone https://github.com/dsohk/rancher-hands-on-workshops
+cd rancher-hands-on-workshops/zlab1
+./startlab.sh
+```
+
+
 ### Lab 2 - Harvester HCI Playground
 
 You will learn how to build a cluster of harvester and managed with Rancher Server on the cloud.
