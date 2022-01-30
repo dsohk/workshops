@@ -1,40 +1,35 @@
-# Rancher Common Terraform Module
+# Rancher Server Shared Terraform Module
 
-The `rancher-common` module contains all resources that do not depend on a
-specific cloud provider. RKE, Kubernetes, Helm, and Rancher providers are used
-given the necessary information about the infrastructure created in a cloud
-provider.
+This `rancher` terraform module helps managing resources required to deploy 
+an instance of Rancher Server, regardless of the underlying cloud provider. 
+The Rancher Server will be running on a given single node with RKE2 installed.
 
 ## Variables
 
 ###### `node_public_ip`
 - **Required**
-Public IP of compute node for Rancher cluster
+Public IP of compute node for Rancher Server
 
 ###### `node_internal_ip`
 - Default: **`""`**
-Internal IP of compute node for Rancher cluster
+Internal IP of compute node for Rancher Server
 
 ###### `node_username`
 - **Required**
-Username used for SSH access to the Rancher server cluster node
+Username used for SSH access to the Rancher Server node
 
 ###### `ssh_private_key_pem`
 - **Required**
-Private key used for SSH access to the Rancher server cluster node
+Private key used for SSH access to the Rancher Server node
 
-Expected to be in PEM format.
 
 ###### `rancher_kubernetes_version`
 - Default: **`"v1.21.8+k3s1"`**
 Kubernetes version to use for Rancher server cluster
 
 ###### `cert_manager_version`
-- Default: **`"1.5.3"`**
+- Default: **`"1.7.0"`**
 Version of cert-manager to install alongside Rancher (format: `0.0.0`)
-
-Available versions are found in `files/cert-manager`, where a supported version
-is indicated by the presence of `crds-${var.cert_manager_version}.yaml`.
 
 ###### `rancher_version`
 - Default: **`"v2.6.3"`**
@@ -54,15 +49,4 @@ Subject Names.
 Admin password to use for Rancher server bootstrap
 
 Log in to the Rancher server using username `admin` and this password.
-
-###### `workload_kubernetes_version`
-- Default: **`"v1.20.6-rancher1-1"`**
-Kubernetes version to use for managed workload cluster
-
-Defaulted to one version behind most recent minor release to allow experimenting
-with upgrading Kubernetes versions.
-
-###### `workload_cluster_name`
-- **Required**
-Name for created custom workload cluster
 

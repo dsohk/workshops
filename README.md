@@ -8,11 +8,11 @@ You need to have the following installed.
 
 1. terraform 
 2. terragrunt
-2. helm
+3. helm
 
 ## Starter
 
-Deploy your very first instance of Rancher Server on cloud. 
+Automate your very first instance of Rancher Server deployment on a cloud provider:
 
 1. Instruction on AWS
 2. Instruction on Azure
@@ -48,4 +48,7 @@ TODO: Move terraform state to Azure Storage
 https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
 
 
+## Reference
+
+This repository starts from referring to [`rancher-quickstart`](https://github.com/rancher/quickstart) project and evolves from there.
 
