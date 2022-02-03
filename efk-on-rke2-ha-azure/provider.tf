@@ -10,4 +10,6 @@ provider "azurerm" {
 provider "tls" {
 }
 
-
+provider "kubernetes" {
+  config_path = local_file.kube_config_server_yaml.filename
+}

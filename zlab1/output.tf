@@ -3,7 +3,7 @@ output "rancher_server_url" {
 }
 
 output "rancher_server_user" {
-  value     = "admin"
+  value = "admin"
 }
 
 output "rancher_server_password" {
@@ -16,7 +16,7 @@ output "keycloak_url" {
 }
 
 output "keycloak_admin_user" {
-  value     = "admin"
+  value = "admin"
 }
 
 output "keycloak_admin_password" {

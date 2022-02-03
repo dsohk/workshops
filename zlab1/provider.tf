@@ -11,7 +11,7 @@ provider "tls" {
 }
 
 provider "kubernetes" {
-  config_path    = module.rancher_server.rancher_rke2_kubeconfig_filepath
+  config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
 }
 
 provider "helm" {
