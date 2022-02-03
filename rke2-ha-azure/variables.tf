@@ -47,42 +47,10 @@ variable "tag_owner" {
 # spec: https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
 # pricing: https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
 # $0.1233/hour Central India (4 vCPU AMD, 16GB RAM, 32GB SSD)
-variable "rancher_server_vm_size" {
-  type        = string
-  description = "Instance type used for all linux virtual machines"
-  default     = "Standard_D4as_v4"
-}
-
-# $0.0622/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD)
 variable "rke2_node_vm_size" {
   type        = string
   description = "Instance type used for all linux virtual machines"
-  default     = "Standard_D2as_v4"
-}
-
-variable "rancher_version" {
-  type        = string
-  description = "Rancher server version (format: v0.0.0)"
-  default     = "v2.6.3"
-}
-
-variable "cert_manager_version" {
-  type        = string
-  description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.7.0"
-}
-
-variable "keycloak_chart_version" {
-  type        = string
-  description = "Version of keycloak chart to be installed onto RKE2 where Rancher runs (format: 0.0.0)"
-  default     = "16.0.5"
-}
-
-# Required
-variable "add_windows_node" {
-  type        = bool
-  description = "Add a windows node to the workload cluster"
-  default     = false
+  default     = "Standard_D4as_v4"
 }
 
 # Local variables used to reduce repetition
@@ -90,8 +58,8 @@ locals {
   node_username = "azureuser"
 }
 
-variable "no_of_downstream_clusters" {
+variable "rke2-cluster-size" {
   type        = number
   description = "Specify number of All In One RKE2 clusters"
-  default     = 2
+  default     = 3
 }

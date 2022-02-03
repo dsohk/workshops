@@ -33,5 +33,7 @@ override.tf.json
 # ssh files
 id_rsa
 id_rsa.pub
+*.crt
+*.pem
 kube_config_server.yaml
 ssh_*.*

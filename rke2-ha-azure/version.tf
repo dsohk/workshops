@@ -12,9 +12,9 @@ terraform {
       source  = "hashicorp/tls"
       version = "3.1.0"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.7.1"
+    ssh = {
+      source  = "loafoe/ssh"
+      version = "1.0.1"
     }
     helm = {
       source  = "hashicorp/helm"

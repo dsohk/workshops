@@ -36,10 +36,6 @@ cd rancher-hands-on-workshops/zlab1
 ```
 
 
-### Lab 2 - Harvester HCI Playground
-
-You will learn how to build a cluster of harvester and managed with Rancher Server on the cloud.
-
 
 ## Contributing to this repository
 
@@ -50,5 +46,5 @@ https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-
 
 ## Reference
 
-This repository starts from referring to [`rancher-quickstart`](https://github.com/rancher/quickstart) project and evolves from there.
+This repository starts from referring to [`rancher-quickstart`](https://github.com/rancher/quickstart) project and evolves from there. 
 

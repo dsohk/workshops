@@ -44,12 +44,16 @@ resource "helm_release" "cert_manager" {
   }
 }
 
+# Wait for 30 seconds till cert-manager is fully initialized
+resource "time_sleep" "wait_30_seconds" {
+  depends_on      = [helm_release.cert_manager]
+  create_duration = "30s"
+}
 
 # Install Rancher helm chart
 resource "helm_release" "rancher_server" {
-  depends_on = [
-    helm_release.cert_manager,
-  ]
+
+  depends_on = [time_sleep.wait_30_seconds]
 
   repository       = "https://releases.rancher.com/server-charts/latest"
   name             = "rancher"

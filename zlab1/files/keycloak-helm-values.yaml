@@ -10,7 +10,6 @@ extraEnv: |
 
 postgresql:
   enabled: false
-  postgresqlPassword: secret
 
 ingress:
   enabled: true
@@ -19,7 +18,10 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+  tls:
+    - hosts:
+        - ${keycloak_fqdn}
+      secretName: "keycloak-tls"
 
 args:
   - -Dkeycloak.profile.feature.docker=enabled
-

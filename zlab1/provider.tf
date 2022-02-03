@@ -10,7 +10,10 @@ provider "azurerm" {
 provider "tls" {
 }
 
-# Helm provider
+provider "kubernetes" {
+  config_path    = module.rancher_server.rancher_rke2_kubeconfig_filepath
+}
+
 provider "helm" {
   kubernetes {
     config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath

@@ -161,6 +161,58 @@ module "rancher_server" {
 # Deploy Keycloak Server on RKE2 in Rancher Server
 # ----------------------------------------------------------------
 
+# keycloak fqdn
+locals {
+  keycloak_fqdn = join(".", ["keycloak", "${azurerm_linux_virtual_machine.rancher_server.public_ip_address}", "sslip.io"])
+}
+
+# private key algorithm
+resource "tls_private_key" "keycloak" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# keycloak private key
+resource "local_file" "keycloak_private_key_pem" {
+  filename          = "${path.module}/keycloak.pem"
+  sensitive_content = tls_private_key.keycloak.private_key_pem
+  file_permission   = "0600"
+}
+
+# keycloak self-signed cert
+resource "tls_self_signed_cert" "keycloak" {
+  key_algorithm   = tls_private_key.keycloak.algorithm
+  private_key_pem = tls_private_key.keycloak.private_key_pem
+
+  # Certificate expires after 365 days.
+  validity_period_hours = 8760
+
+  # Generate a new certificate if Terraform is run within three
+  # hours of the certificate's expiration time.
+  early_renewal_hours = 3
+
+  # Reasonable set of uses for a server SSL certificate.
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+
+  dns_names = [local.keycloak_fqdn]
+
+  subject {
+    common_name  = local.keycloak_fqdn
+    organization = local.keycloak_fqdn
+  }
+}
+
+# keycloak certificate
+resource "local_file" "keycloak_crt" {
+  filename          = "${path.module}/keycloak.crt"
+  sensitive_content = tls_self_signed_cert.keycloak.cert_pem
+  file_permission   = "0600"
+}
+
 # Keycloak admin password
 resource "random_password" "keycloak_admin_password" {
   length           = 16
@@ -169,9 +221,31 @@ resource "random_password" "keycloak_admin_password" {
 }
 
 # deploy keycloak on Rancher RKE2 cluster
+
+# create secret for storing keycloak tls in namespace keycloak
+resource "kubernetes_namespace" "keycloak" {
+  depends_on = [module.rancher_server]
+  metadata {
+    name = "keycloak"
+  }
+}
+resource "kubernetes_secret" "keycloak-tls" {
+  depends_on = [module.rancher_server]
+  metadata {
+    name      = "keycloak-tls"
+    namespace = "keycloak"
+  }
+  type = "tls"
+  data = {
+    "tls.crt" = tls_self_signed_cert.keycloak.cert_pem
+    "tls.key" = tls_private_key.keycloak.private_key_pem
+  }
+}
+
 resource "helm_release" "keycloak" {
   depends_on = [
     module.rancher_server,
+    kubernetes_secret.keycloak-tls
   ]
 
   repository       = "https://codecentric.github.io/helm-charts"
@@ -185,12 +259,12 @@ resource "helm_release" "keycloak" {
 
   values = [
     templatefile(
-       join("/", [path.module, "files/keycloak-helm-values.yaml"]),
-       {
-         keycloak_admin_password = random_password.keycloak_admin_password.result,
-         keycloak_fqdn = join(".", ["keycloak", "${azurerm_linux_virtual_machine.rancher_server.public_ip_address}", "sslip.io"])
-       }
-    )    
+      join("/", [path.module, "files/keycloak-helm-values.yaml"]),
+      {
+        keycloak_admin_password = random_password.keycloak_admin_password.result,
+        keycloak_fqdn           = local.keycloak_fqdn
+      }
+    )
   ]
 
 }
@@ -316,7 +390,7 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
 
 # ssh command file for RKE2 nodes VM
 resource "local_file" "ssh_to_rke2_clusters" {
-  count = var.no_of_downstream_clusters
+  count           = var.no_of_downstream_clusters
   filename        = format("${path.module}/ssh_rke2-cluster%d.sh", count.index + 1)
   content         = join(" ", ["ssh", "-i id_rsa", "-o StrictHostKeyChecking=no", "${local.node_username}@${azurerm_linux_virtual_machine.rke2_node[count.index].public_ip_address}"])
   file_permission = "0755"
