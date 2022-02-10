@@ -67,6 +67,6 @@ variable "rke2-cluster-size" {
 variable "eck_version" {
   type        = string
   description = "Elastic Operator version."
-  default     = "1.8.0"
+  default     = "1.9.0"
 }
 

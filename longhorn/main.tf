@@ -1,5 +1,6 @@
 # Install longhorn helm chart
 resource "helm_release" "longhorn" {
+  provider         = longhorn-helm
   repository       = "https://charts.longhorn.io"
   name             = "longhorn"
   chart            = "longhorn"
@@ -21,3 +22,5 @@ resource "time_sleep" "wait_30_seconds" {
   depends_on      = [helm_release.longhorn]
   create_duration = "30s"
 }
+
+

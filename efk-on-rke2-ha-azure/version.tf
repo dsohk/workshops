@@ -20,14 +20,6 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.4.1"
     }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "1.13.1"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.7.1"
-    }
     rancher2 = {
       source  = "rancher/rancher2"
       version = "1.22.2"
@@ -35,3 +27,4 @@ terraform {
   }
   required_version = ">= 0.14.9"
 }
+

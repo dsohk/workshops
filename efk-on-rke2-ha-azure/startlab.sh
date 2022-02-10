@@ -59,4 +59,6 @@ terraform fmt
 # Lastly, kick of the terraform scripts
 terraform init
 terraform plan
+touch ./kube_config_server.yaml
 TF_LOG=DEBUG terraform apply --auto-approve
+

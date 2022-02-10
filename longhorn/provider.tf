@@ -1,5 +1,5 @@
 # Helm provider
-provider "helm" {
+provider "longhorn-helm" {
   kubernetes {
     config_path = var.kubernetes_config_path
   }
