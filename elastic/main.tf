@@ -126,8 +126,5 @@ data "kubernetes_secret" "elastic_password" {
     name      = "susedemo-es-elastic-user"
     namespace = "elastic-system"
   }
-  binary_data = {
-    "elastic" = ""
-  }
 }
 

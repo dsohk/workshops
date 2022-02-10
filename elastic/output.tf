@@ -12,7 +12,7 @@ output "elastic_user" {
 }
 
 output "elastic_password" {
-  value     = data.kubernetes_secret.elastic_password.binary_data.elastic
+  value     = data.kubernetes_secret.elastic_password.data.elastic
   sensitive = true
 }
 
