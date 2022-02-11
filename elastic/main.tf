@@ -20,13 +20,13 @@ data "kubectl_file_documents" "elastic_op" {
 }
 
 resource "kubectl_manifest" "apply_elastic_crds" {
-  provider = elastic-kubectl
+  provider  = elastic-kubectl
   for_each  = data.kubectl_file_documents.elastic_crds.manifests
   yaml_body = each.value
 }
 
 resource "kubectl_manifest" "apply_elastic_op" {
-  provider = elastic-kubectl
+  provider   = elastic-kubectl
   depends_on = [kubectl_manifest.apply_elastic_crds]
   for_each   = data.kubectl_file_documents.elastic_op.manifests
   yaml_body  = each.value
@@ -43,8 +43,8 @@ resource "time_sleep" "wait_15_seconds" {
 
 resource "kubectl_manifest" "elasticsearch_cluster" {
   depends_on = [time_sleep.wait_15_seconds]
-  provider = elastic-kubectl
-  yaml_body = <<YAML
+  provider   = elastic-kubectl
+  yaml_body  = <<YAML
 apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
@@ -64,7 +64,7 @@ spec:
             targetPort: 9200
   nodeSets:
   - name: default
-    count: 1
+    count: ${var.es_count}
     config:
       node.store.allow_mmap: false
     volumeClaimTemplates:
@@ -83,9 +83,9 @@ YAML
 # Deploy Kibana
 
 resource "kubectl_manifest" "kibana" {
-  provider = elastic-kubectl
+  provider   = elastic-kubectl
   depends_on = [time_sleep.wait_15_seconds]
-  yaml_body = <<YAML
+  yaml_body  = <<YAML
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
@@ -93,7 +93,7 @@ metadata:
   namespace: elastic-system
 spec:
   version: 7.17.0
-  count: 1
+  count: ${var.kb_count}
   elasticsearchRef:
     name: susedemo
   http:
@@ -120,7 +120,7 @@ YAML
 # define ingress URL for elasticsearch and kibana
 
 data "kubernetes_secret" "elastic_password" {
-  provider = elastic-kubernetes
+  provider   = elastic-kubernetes
   depends_on = [kubectl_manifest.elasticsearch_cluster]
   metadata {
     name      = "susedemo-es-elastic-user"

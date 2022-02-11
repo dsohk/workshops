@@ -35,3 +35,14 @@ variable "kb_port" {
   default     = 30002
 }
 
+variable "es_count" {
+  type        = number
+  description = "Number of replicas for ElasticSearch"
+  default     = 1
+}
+
+variable "kb_count" {
+  type        = number
+  description = "Number of replicas for Kibana"
+  default     = 1
+}

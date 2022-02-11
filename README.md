@@ -1,22 +1,20 @@
-# SUSE Cloud Native Hands-on Workshop Series
+# SUSE Cloud-Native Hands-on Workshop Series
 
-This is a series of hands-on workshops and demos to learn cloud native technologies with Rancher, Longhorn, Neuvector, Harvester, and more.
+This is a series of hands-on workshops and demos to learn cloud-native technologies with Rancher, Longhorn, Neuvector, Harvester, and more.
 
 ## Pre-requisites
-
-You need to have the following installed.
 
 1. terraform 
 2. terragrunt
 3. helm
 
-## Starter
+## Start my Rancher Server on the Cloud
 
 Automate your very first instance of Rancher Server deployment on a cloud provider:
 
-1. Instruction on AWS
-2. Instruction on Azure
-3. Instruction on Google Cloud Platform
+1. [AWS](./rancher-server-aws-ec2)
+2. [Azure](./rancher-server-azure)
+3. [Google Cloud Platform](./rancher-server-google-cloud-platform)
 
 ## Hands-on Lab Series
 
