@@ -10,7 +10,7 @@ unzip terraform_${TF_VERSION}_linux_amd64.zip
 mkdir -p $HOME/bin
 mv terraform $TF_BIN
 rm terraform_${TF_VERSION}_linux_amd64.zip
-terraform -install-autocomplete
+terraform -install-autocomplete || true
 
 # Download and install helm utility
 HELM_VERSION=3.8.0
@@ -54,7 +54,7 @@ sed -i /^azure_client_id/c\azure_client_id=\"$CLIENT_ID\" terraform.tfvars
 sed -i /^azure_client_secret/c\azure_client_secret=\"$CLIENT_SECRET\" terraform.tfvars
 terraform fmt
 
-# Lastly, kick of the terraform scripts
+# Lastly, kick off the terraform scripts
 terraform init
 touch ./kube_config_server.yaml
 terraform plan
