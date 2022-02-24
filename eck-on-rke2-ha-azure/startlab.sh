@@ -3,7 +3,7 @@
 # Run this in Azure Cloud Shell
 
 # Download and install terraform
-TF_VERSION=1.1.2
+TF_VERSION=1.1.6
 TF_BIN=$HOME/bin/terraform
 if [ ! -f "$TF_BIN" ]; then
   wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
