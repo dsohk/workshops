@@ -22,7 +22,12 @@ resource "azurerm_resource_group" "rke2-cluster" {
   location = var.azure_location
 
   tags = {
-    Owner = var.tag_owner
+    Resource_owner = var.tag_resource_owner,
+    Group          = var.tag_group,
+    Department     = var.tag_department,
+    Stakeholder    = var.tag_stakeholder,
+    Environment    = var.tag_environment,
+    Project        = var.tag_project
   }
 }
 
@@ -32,10 +37,6 @@ resource "azurerm_virtual_network" "rke2-cluster" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rke2-cluster.location
   resource_group_name = azurerm_resource_group.rke2-cluster.name
-
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # ----------------------------------------------------------------
@@ -154,11 +155,6 @@ resource "azurerm_public_ip" "rke2-nodes-pip" {
   location            = azurerm_resource_group.rke2-cluster.location
   resource_group_name = azurerm_resource_group.rke2-cluster.name
   allocation_method   = "Dynamic"
-
-  tags = {
-    Owner = var.tag_owner
-  }
-
 }
 
 # RKE2 node network security group
@@ -197,9 +193,6 @@ resource "azurerm_network_interface" "rke2-nodes-nic" {
     public_ip_address_id          = azurerm_public_ip.rke2-nodes-pip[count.index].id
   }
 
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # Associate network interface with RKE2 Network Security Group
@@ -254,10 +247,6 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
-  }
-
-  tags = {
-    Owner = var.tag_owner
   }
 
   provisioner "remote-exec" {

@@ -37,7 +37,7 @@ TENANT_ID=`az account list | jq -r .[0].tenantId`
 SUBSCRIPTION_ID=`az account subscription list | jq -r .[0].subscriptionId`
 
 ## Create or patch existing service pricinpal
-SERVICE_PRINCIPAL_NAME=suse-rancher
+SERVICE_PRINCIPAL_NAME=`az account list | jq -r .[0].user.name | sed 's/[\@._+]/-/g'`
 az ad sp create-for-rbac \
   --name $SERVICE_PRINCIPAL_NAME \
   --role contributor \
@@ -58,7 +58,7 @@ terraform fmt
 
 # Lastly, kick of the terraform scripts
 terraform init
-terraform plan
 touch ./kube_config_server.yaml
+terraform plan
 TF_LOG=DEBUG terraform apply --auto-approve
 
