@@ -2,17 +2,15 @@
 
 # Run this in Azure Cloud Shell
 
-# Download and install terraform
+# Always Download and install terraform
 TF_VERSION=1.1.6
 TF_BIN=$HOME/bin/terraform
-if [ ! -f "$TF_BIN" ]; then
-  wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
-  unzip terraform_${TF_VERSION}_linux_amd64.zip
-  mkdir -p $HOME/bin
-  mv terraform $TF_BIN
-  rm terraform_${TF_VERSION}_linux_amd64.zip
-  terraform -install-autocomplete
-fi
+wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+unzip terraform_${TF_VERSION}_linux_amd64.zip
+mkdir -p $HOME/bin
+mv terraform $TF_BIN
+rm terraform_${TF_VERSION}_linux_amd64.zip
+terraform -install-autocomplete
 
 # Download and install helm utility
 HELM_VERSION=3.8.0
