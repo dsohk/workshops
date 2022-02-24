@@ -23,7 +23,12 @@ resource "azurerm_resource_group" "rancher" {
   location = var.azure_location
 
   tags = {
-    Owner = var.tag_owner
+    Resource_owner = var.tag_resource_owner,
+    Group          = var.tag_group,
+    Department     = var.tag_department,
+    Stakeholder    = var.tag_stakeholder,
+    Environment    = var.tag_environment,
+    Project        = var.tag_project
   }
 }
 
@@ -33,10 +38,6 @@ resource "azurerm_virtual_network" "rancher" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # Azure subnet for rancher server
@@ -53,10 +54,6 @@ resource "azurerm_public_ip" "rancher-server-pip" {
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
   allocation_method   = "Dynamic"
-
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # Azure network interface for rancher server
@@ -72,9 +69,6 @@ resource "azurerm_network_interface" "rancher-server-nic" {
     public_ip_address_id          = azurerm_public_ip.rancher-server-pip.id
   }
 
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # Azure linux virtual machine for creating a single node RKE cluster and installing the Rancher Server
@@ -103,10 +97,6 @@ resource "azurerm_linux_virtual_machine" "rancher_server" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
-  }
-
-  tags = {
-    Owner = var.tag_owner
   }
 
   provisioner "remote-exec" {
@@ -304,10 +294,6 @@ resource "azurerm_public_ip" "rke2-nodes-pip" {
   resource_group_name = azurerm_resource_group.rancher.name
   allocation_method   = "Dynamic"
 
-  tags = {
-    Owner = var.tag_owner
-  }
-
 }
 
 # Azure network interface for rancher server
@@ -322,10 +308,6 @@ resource "azurerm_network_interface" "rke2-nodes-nic" {
     subnet_id                     = azurerm_subnet.rke2-subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.rke2-nodes-pip[count.index].id
-  }
-
-  tags = {
-    Owner = var.tag_owner
   }
 }
 
@@ -365,10 +347,6 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
-  }
-
-  tags = {
-    Owner = var.tag_owner
   }
 
   provisioner "remote-exec" {

@@ -2,17 +2,15 @@
 
 # Run this in Azure Cloud Shell
 
-# Download and install terraform
-TF_VERSION=1.1.2
+# Always Download and install terraform
+TF_VERSION=1.1.6
 TF_BIN=$HOME/bin/terraform
-if [ ! -f "$TF_BIN" ]; then
-  wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
-  unzip terraform_${TF_VERSION}_linux_amd64.zip
-  mkdir -p $HOME/bin
-  mv terraform $TF_BIN
-  rm terraform_${TF_VERSION}_linux_amd64.zip
-  terraform -install-autocomplete
-fi
+wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+unzip terraform_${TF_VERSION}_linux_amd64.zip
+mkdir -p $HOME/bin
+mv terraform $TF_BIN
+rm terraform_${TF_VERSION}_linux_amd64.zip
+terraform -install-autocomplete || true
 
 # Download and install helm utility
 HELM_VERSION=3.8.0
@@ -37,7 +35,7 @@ TENANT_ID=`az account list | jq -r .[0].tenantId`
 SUBSCRIPTION_ID=`az account subscription list | jq -r .[0].subscriptionId`
 
 ## Create or patch existing service pricinpal
-SERVICE_PRINCIPAL_NAME=suse-rancher
+SERVICE_PRINCIPAL_NAME=`az account list | jq -r .[0].user.name | sed 's/[\@._+]/-/g'`
 az ad sp create-for-rbac \
   --name $SERVICE_PRINCIPAL_NAME \
   --role contributor \
@@ -56,8 +54,9 @@ sed -i /^azure_client_id/c\azure_client_id=\"$CLIENT_ID\" terraform.tfvars
 sed -i /^azure_client_secret/c\azure_client_secret=\"$CLIENT_SECRET\" terraform.tfvars
 terraform fmt
 
-# Lastly, kick of the terraform scripts
+# Lastly, kick off the terraform scripts
 terraform init
+touch ./kube_config_server.yaml
 terraform plan
-touch kube_config_server.yaml
 TF_LOG=DEBUG terraform apply --auto-approve
+
