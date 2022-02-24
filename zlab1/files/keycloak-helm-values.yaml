@@ -9,7 +9,7 @@ extraEnv: |
     value: "true"
 
 postgresql:
-  enabled: false
+  enabled: true
 
 ingress:
   enabled: true

@@ -53,7 +53,7 @@ resource "azurerm_public_ip" "rancher-server-pip" {
   name                = "rancher-server-pip"
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 # Azure network interface for rancher server
@@ -147,6 +147,12 @@ module "rancher_server" {
   windows_prefered_cluster = var.add_windows_node
 }
 
+# Install NFS provisioner on Rancher
+module "nfs_server_provisioner" {
+  source = "../nfs-server-provisioner"
+  kubernetes_config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
+}
+
 # ----------------------------------------------------------------
 # Deploy Keycloak Server on RKE2 in Rancher Server
 # ----------------------------------------------------------------
@@ -214,13 +220,13 @@ resource "random_password" "keycloak_admin_password" {
 
 # create secret for storing keycloak tls in namespace keycloak
 resource "kubernetes_namespace" "keycloak" {
-  depends_on = [module.rancher_server]
+  depends_on = [module.rancher_server, module.nfs_server_provisioner]
   metadata {
     name = "keycloak"
   }
 }
 resource "kubernetes_secret" "keycloak-tls" {
-  depends_on = [module.rancher_server]
+  depends_on = [module.rancher_server, module.nfs_server_provisioner]
   metadata {
     name      = "keycloak-tls"
     namespace = "keycloak"
@@ -235,6 +241,7 @@ resource "kubernetes_secret" "keycloak-tls" {
 resource "helm_release" "keycloak" {
   depends_on = [
     module.rancher_server,
+    module.nfs_server_provisioner,
     kubernetes_secret.keycloak-tls
   ]
 
@@ -292,7 +299,7 @@ resource "azurerm_public_ip" "rke2-nodes-pip" {
   name                = format("rke2-node%d-pip", count.index + 1)
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 
 }
 
