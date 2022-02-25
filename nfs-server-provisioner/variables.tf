@@ -7,13 +7,13 @@ variable "kubernetes_config_path" {
 }
 
 variable "nfs_server_version" {
-  type = string
+  type        = string
   description = "nfs server provisioner chart version"
-  default = "1.4.0"
+  default     = "1.4.0"
 }
 
 variable "storageclass_defaultclass" {
-  type = string
+  type        = string
   description = "set as default storageclass"
-  default = "true"
+  default     = "true"
 }

@@ -149,7 +149,7 @@ module "rancher_server" {
 
 # Install NFS provisioner on Rancher
 module "nfs_server_provisioner" {
-  source = "../nfs-server-provisioner"
+  source                 = "../nfs-server-provisioner"
   kubernetes_config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
 }
 
@@ -265,6 +265,17 @@ resource "helm_release" "keycloak" {
   ]
 
 }
+
+# install ECK on Rancher Server
+module "elastic" {
+  source                 = "../elastic"
+  kubernetes_config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
+  storage_class_name     = module.nfs_server_provisioner.storage_class_name
+  eck_host               = azurerm_linux_virtual_machine.rancher_server.public_ip_address
+  es_count               = 1
+  kb_count               = 1
+}
+
 
 # ----------------------------------------------------------------
 # Create RKE2 downstream cluster

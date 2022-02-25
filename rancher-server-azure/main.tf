@@ -7,7 +7,12 @@ resource "azurerm_resource_group" "rancher" {
   location = var.azure_location
 
   tags = {
-    Owner = var.tag_owner
+    Resource_owner = var.tag_resource_owner,
+    Group          = var.tag_group,
+    Department     = var.tag_department,
+    Stakeholder    = var.tag_stakeholder,
+    Environment    = var.tag_environment,
+    Project        = var.tag_project
   }
 }
 
@@ -17,10 +22,6 @@ resource "azurerm_virtual_network" "rancher" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 # Azure internal subnet for quickstart resources
@@ -36,11 +37,7 @@ resource "azurerm_public_ip" "rancher-server-pip" {
   name                = "rancher-server-pip"
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-  allocation_method   = "Dynamic"
-
-  tags = {
-    Owner = var.tag_owner
-  }
+  allocation_method   = "Static"
 }
 
 # Azure network interface for rancher server
@@ -56,9 +53,6 @@ resource "azurerm_network_interface" "rancher-server-nic" {
     public_ip_address_id          = azurerm_public_ip.rancher-server-pip.id
   }
 
-  tags = {
-    Owner = var.tag_owner
-  }
 }
 
 resource "tls_private_key" "global_key" {
@@ -114,10 +108,6 @@ resource "azurerm_linux_virtual_machine" "rancher_server" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
-  }
-
-  tags = {
-    Owner = var.tag_owner
   }
 
   provisioner "remote-exec" {

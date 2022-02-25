@@ -32,10 +32,40 @@ variable "prefix" {
   default     = "lab"
 }
 
-variable "tag_owner" {
+variable "tag_resource_owner" {
   type        = string
   description = "Owner for the resource (as tag)"
-  default     = "demo"
+  default     = "you@email.com"
+}
+
+variable "tag_group" {
+  type        = string
+  description = "Group (as tag)"
+  default     = "My Group"
+}
+
+variable "tag_department" {
+  type        = string
+  description = "Department (as tag)"
+  default     = "My Department"
+}
+
+variable "tag_stakeholder" {
+  type        = string
+  description = "Stakeholder (as tag)"
+  default     = "Manager Name"
+}
+
+variable "tag_environment" {
+  type        = string
+  description = "Stakeholder (as tag)"
+  default     = "Test"
+}
+
+variable "tag_project" {
+  type        = string
+  description = "Project (as tag)"
+  default     = "Demo"
 }
 
 variable "instance_type" {

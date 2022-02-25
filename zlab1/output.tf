@@ -23,3 +23,22 @@ output "keycloak_admin_password" {
   value     = random_password.keycloak_admin_password.result
   sensitive = true
 }
+
+
+output "elastic_url" {
+  value = module.elastic.elastic_url
+}
+
+output "kibana_url" {
+  value = module.elastic.kibana_url
+}
+
+output "elastic_user" {
+  value = module.elastic.elastic_user
+}
+
+output "elastic_password" {
+  value     = module.elastic.elastic_password
+  sensitive = true
+}
+
