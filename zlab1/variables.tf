@@ -76,18 +76,20 @@ variable "tag_project" {
 
 # spec: https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
 # pricing: https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
-# $0.1233/hour Central India (4 vCPU AMD, 16GB RAM, 32GB SSD)
+# $0.1233/hour Central India (4 vCPU AMD, 16GB RAM, 32GB SSD) - Standard_D4as_v4
+# $0.179/hour Central India (4 vCPU AMD, 16GB RAM, 32GB SSD) - Standard_B4ms
 variable "rancher_server_vm_size" {
   type        = string
   description = "Instance type used for all linux virtual machines"
-  default     = "Standard_D4as_v4"
+  default     = "Standard_B4ms"
 }
 
-# $0.0622/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD)
+# $0.0622/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD) - Standard_D2as_v4
+# $0.0896/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD) - Standard_B2ms
 variable "rke2_node_vm_size" {
   type        = string
   description = "Instance type used for all linux virtual machines"
-  default     = "Standard_D2as_v4"
+  default     = "Standard_B2ms"
 }
 
 variable "rancher_version" {
