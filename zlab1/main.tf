@@ -53,7 +53,7 @@ resource "azurerm_public_ip" "rancher-server-pip" {
   name                = "rancher-server-pip"
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 # Azure network interface for rancher server
