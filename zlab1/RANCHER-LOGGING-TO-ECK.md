@@ -1,28 +1,28 @@
 # Configure Rancher managed Kubernetes log forwarding to ECK (Elastic Search on Kubernetes)
 
-Rancher
-1. Go to cluster2
-2. Apps -> add chart rodeo https://rancher.github.io/rodeo
-3. Deploy rancher-demo
+## Setup Rancher for log shipping
+1. Go to cluster1
 4. Cluster Tools -> Enable logging
 5. Storage > Secrets > Create (elastic)
-6. Logging 
-    1. Outputs => http (not s) 
+6. configure ClusterOutput (refer to yaml below)
+7. Deploy sample app (refer to yaml below)
+8. configure Flow (refer to yaml below)
+
+## Configure EFK
+
+After login with elastic user,
+
+1. Main Menu > Stack Management > Kibana/Index Patterns
+2. Create new index patterns > fluentd
+3. Analytics > Discover (To show the logs)
+
+Example:
 
 https://banzaicloud.com/docs/one-eye/logging-operator/configuration/plugins/outputs/elasticsearch/
 
 Deployment example
 https://banzaicloud.com/docs/one-eye/logging-operator/quickstarts/es-nginx/
 
-
-
-## ECK 
-
-After login with elastic user,
-
-1. Stack Management > Kibana/Index Patterns
-2. Create new index patterns > fluentd
-3. Analytics > Discover
 
 
 --------------------------------
@@ -34,14 +34,14 @@ metadata:
   name: my-elasticsearch
 type: Opaque
 data:
-  password: OHA5RnhGN1VpMjAyMmlsOTNrc0FZQTJi
+  password: (Your own elastic password in base64)
 
 
 
 # define output
 
 apiVersion: logging.banzaicloud.io/v1beta1
-kind: Output
+kind: ClusterOutput
 metadata:
   name: my-elasticsearch
 spec:
@@ -69,7 +69,7 @@ spec:
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: Flow
 metadata:
-  name: my-flow2elastic
+  name: my-applog
 spec:
   filters:
     - tag_normaliser: {}
@@ -105,6 +105,6 @@ spec:
      - name: nginx
        image: banzaicloud/log-generator:0.3.2
 
-# 
+
 
 
