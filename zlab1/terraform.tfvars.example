@@ -4,6 +4,7 @@ azure_tenant_id       = ""
 azure_client_id       = ""
 azure_client_secret   = ""
 azure_location        = "Central India"
+rancher_server_use_static_public_ip = false
 prefix                = "lab"
 resource_group_name   = "attendee1"
 tag_resource_owner    = "you@email.com"

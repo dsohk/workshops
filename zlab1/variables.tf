@@ -74,6 +74,12 @@ variable "tag_project" {
   default     = "Demo"
 }
 
+variable "rancher_server_use_static_public_ip" {
+  type        = bool
+  description = "Indicate if static public ip should be allocated to rancher server"
+  default     = false
+}
+
 # spec: https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
 # pricing: https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
 # $0.1233/hour Central India (4 vCPU AMD, 16GB RAM, 32GB SSD) - Standard_D4as_v4

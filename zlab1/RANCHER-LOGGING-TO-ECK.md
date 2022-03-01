@@ -21,7 +21,7 @@ https://banzaicloud.com/docs/one-eye/logging-operator/quickstarts/es-nginx/
 After login with elastic user,
 
 1. Stack Management > Kibana/Index Patterns
-2. Create new index patterns > demo-*
+2. Create new index patterns > fluentd
 3. Analytics > Discover
 
 
@@ -57,6 +57,7 @@ spec:
         secretKeyRef:
           name: my-elasticsearch
           key: password
+    include_timestamp: true
     buffer:
       timekey: 1m
       timekey_wait: 30s
