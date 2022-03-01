@@ -28,6 +28,8 @@ https://banzaicloud.com/docs/one-eye/logging-operator/quickstarts/es-nginx/
 --------------------------------
 
 # create secret
+
+```
 apiVersion: v1
 kind: Secret
 metadata:
@@ -35,11 +37,12 @@ metadata:
 type: Opaque
 data:
   password: (Your own elastic password in base64)
-
+```
 
 
 # define output
 
+```
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: ClusterOutput
 metadata:
@@ -62,10 +65,11 @@ spec:
       timekey: 1m
       timekey_wait: 30s
       timekey_use_utc: true
-
+```
 
 # define flow
 
+```
 apiVersion: logging.banzaicloud.io/v1beta1
 kind: Flow
 metadata:
@@ -84,9 +88,11 @@ spec:
            app.kubernetes.io/name: log-generator
   localOutputRefs:
     - my-elasticsearch
+```
 
 # define sample app to generate logs
 
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -104,7 +110,7 @@ spec:
      containers:
      - name: nginx
        image: banzaicloud/log-generator:0.3.2
-
+```
 
 
 
