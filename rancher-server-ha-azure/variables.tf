@@ -35,7 +35,7 @@ variable "prefix" {
 variable "resource_group_name" {
   type        = string
   description = "Resource Group Name"
-  default     = "attendee1"
+  default     = "rancher-server-ha"
 }
 
 
@@ -73,6 +73,18 @@ variable "tag_project" {
   type        = string
   description = "Project (as tag)"
   default     = "Demo"
+}
+
+variable "cert_manager_version" {
+  type        = string
+  description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
+  default     = "1.5.3"
+}
+
+variable "rancher_version" {
+  type        = string
+  description = "Rancher server version (format v0.0.0)"
+  default     = "v2.6.3"
 }
 
 # spec: https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series

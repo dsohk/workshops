@@ -260,3 +260,86 @@ resource "local_file" "kube_config_server_yaml" {
   filename   = format("%s/%s", path.root, "kube_config_server.yaml")
   content    = ssh_resource.retrieve_config.result
 }
+
+
+# Rancher bootstrap password
+resource "random_password" "rancher_server_password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
+
+locals {
+  rancher_server_dns = join(".", ["rancher", azurerm_public_ip.rke2-lb-pip.ip_address, "sslip.io"])
+  rancher_password = random_password.rancher_server_password.result
+}
+
+# Install cert-manager helm chart
+resource "helm_release" "cert_manager" {
+  repository       = "https://charts.jetstack.io"
+  name             = "cert-manager"
+  chart            = "cert-manager"
+  version          = "v${var.cert_manager_version}"
+  namespace        = "cert-manager"
+  create_namespace = true
+  wait             = true
+  wait_for_jobs    = true
+  verify           = false
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
+
+# Wait for 30 seconds till cert-manager is fully initialized
+resource "time_sleep" "wait_30_seconds" {
+  depends_on      = [helm_release.cert_manager]
+  create_duration = "30s"
+}
+
+# Install Rancher helm chart
+resource "helm_release" "rancher_server" {
+
+  depends_on = [time_sleep.wait_30_seconds]
+
+  repository       = "https://releases.rancher.com/server-charts/latest"
+  name             = "rancher"
+  chart            = "rancher"
+  version          = var.rancher_version
+  namespace        = "cattle-system"
+  create_namespace = true
+  wait             = true
+  wait_for_jobs    = true
+
+  set {
+    name  = "hostname"
+    value = local.rancher_server_dns
+  }
+
+  set {
+    name  = "replicas"
+    value = "1"
+  }
+
+  set {
+    name  = "bootstrapPassword"
+    value = local.rancher_password
+  }
+}
+
+
+# Initialize Rancher server
+resource "rancher2_bootstrap" "admin" {
+  depends_on = [
+    helm_release.rancher_server
+  ]
+
+  provider = rancher2.bootstrap
+
+  initial_password = local.rancher_password
+  password         = local.rancher_password
+  telemetry        = true
+}
+
+
