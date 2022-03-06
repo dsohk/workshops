@@ -17,12 +17,12 @@ do
     break
   fi
 done
-terraform output -json > tf-output.json
+terraform output -json > lab-credentials.json
 
 WEBFILE=$POD_NAME
 # WEBFILE=labattendee1
 # RANDOMSTRING=`openssl rand -hex 10`
-UPLOAD_FILE=tf-output.json
+UPLOAD_FILE=$WEBFILE.zip
 DATE_NOW=$(date -Ru | sed 's/\+0000/GMT/')
 AZ_VERSION="2020-08-04"
 # AZ_STORAGE_ACCOUNT="rancherworkshop"
@@ -31,15 +31,19 @@ AZ_VERSION="2020-08-04"
 AZ_BLOB_URL="https://${AZ_STORAGE_ACCOUNT}.blob.core.windows.net"
 AZ_BLOB_TARGET="${AZ_BLOB_URL}/${AZ_BLOB_CONTAINER}/"
 
+echo "Zipping the files for upload..."
+zip $WEBFILE.zip lab-credentials.json kube_config_server.yaml keycloak.*
+
+echo "Upload file ..."
 curl -X PUT \
-  -H "Content-Type: application/octet-stream" \
+  -H "Content-Type: application/json" \
   -H "x-ms-date: ${DATE_NOW}" \
   -H "x-ms-version: ${AZ_VERSION}" \
   -H "x-ms-blob-type: BlockBlob" \
-  --data-binary "@${UPLOAD_FILE}" "${AZ_BLOB_TARGET}${WEBFILE}.json?${AZ_SAS_TOKEN}"
+  --data-binary "@${UPLOAD_FILE}" "${AZ_BLOB_TARGET}${WEBFILE}.zip?${AZ_SAS_TOKEN}"
 
 echo "Lab has been provisioned successfully. Credentials are uploaded to ..."
-echo "${AZ_BLOB_URL}/${AZ_BLOB_CONTAINER}/${WEBFILE}.json"
+echo "${AZ_BLOB_URL}/${AZ_BLOB_CONTAINER}/${WEBFILE}.zip"
 echo
 echo "Bye!"
 
