@@ -132,7 +132,7 @@ resource "random_password" "rancher_server_password" {
 
 # Rancher resources
 module "rancher_server" {
-  source = "../rancher"
+  source = "../../../terraform-modules/rancher"
 
   node_public_ip      = azurerm_linux_virtual_machine.rancher_server.public_ip_address
   node_internal_ip    = azurerm_linux_virtual_machine.rancher_server.private_ip_address
@@ -149,7 +149,7 @@ module "rancher_server" {
 
 # Install NFS provisioner on Rancher
 module "nfs_server_provisioner" {
-  source                 = "../nfs-server-provisioner"
+  source                 = "../../../terraform-modules/nfs-server-provisioner"
   kubernetes_config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
 }
 
@@ -268,7 +268,7 @@ resource "helm_release" "keycloak" {
 
 # install ECK on Rancher Server
 module "elastic" {
-  source                 = "../elastic"
+  source                 = "../../../terraform-modules/elastic"
   kubernetes_config_path = module.rancher_server.rancher_rke2_kubeconfig_filepath
   storage_class_name     = module.nfs_server_provisioner.storage_class_name
   eck_host               = azurerm_linux_virtual_machine.rancher_server.public_ip_address

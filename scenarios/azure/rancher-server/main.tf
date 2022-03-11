@@ -143,7 +143,7 @@ resource "random_password" "rancher_server_password" {
 
 # Rancher resources
 module "rancher_server" {
-  source = "../rancher"
+  source = "../../../terraform-modules/rancher"
 
   node_public_ip      = azurerm_linux_virtual_machine.rancher_server.public_ip_address
   node_internal_ip    = azurerm_linux_virtual_machine.rancher_server.private_ip_address

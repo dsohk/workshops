@@ -98,7 +98,7 @@ resource "random_password" "rancher_server_password" {
 
 # Rancher resources
 module "rancher_server" {
-  source = "../rancher"
+  source = "../../../terraform-modules/rancher"
 
   node_public_ip      = google_compute_instance.rancher_server.network_interface.0.access_config.0.nat_ip
   node_internal_ip    = google_compute_instance.rancher_server.network_interface.0.network_ip

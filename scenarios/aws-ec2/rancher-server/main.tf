@@ -140,7 +140,7 @@ resource "random_password" "rancher_server_password" {
 
 # Rancher resources
 module "rancher_server" {
-  source = "../rancher"
+  source = "../../../terraform-modules/rancher"
 
   node_public_ip      = aws_instance.rancher_server.public_ip
   node_internal_ip    = aws_instance.rancher_server.private_ip
