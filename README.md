@@ -12,9 +12,9 @@ This is a series of hands-on workshops and demos to learn cloud-native technolog
 
 Automate your very first instance of Rancher Server deployment on a cloud provider:
 
-1. [AWS](./rancher-server-aws-ec2)
-2. [Azure](./rancher-server-azure)
-3. [Google Cloud Platform](./rancher-server-google-cloud-platform)
+1. [AWS](./scenarios/aws-ec2/rancher-server)
+2. [Azure](./scenarios/azure/rancher-server)
+3. [Google Cloud Platform](./scenarios/gcp/rancher-server)
 
 ## Hands-on Lab Series
 

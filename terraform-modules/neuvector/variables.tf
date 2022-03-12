@@ -1,0 +1,20 @@
+# Variables for neuvector terraform module
+
+# Required
+variable "kubernetes_config_path" {
+  type        = string
+  description = "config path connecting to the kubernetes cluster where neuvector is target to deploy to"
+}
+
+variable "neuvector_helm_chart_version" {
+  type        = string
+  description = "Version of neuvector to install (format: 0.0.0)"
+  default     = "1.8.9"
+}
+
+variable "neuvector_version" {
+  type        = string
+  description = "Version of neuvector to install (format: 0.0.0)"
+  default     = "5.0.0-preview.2"
+}
+
