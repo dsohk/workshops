@@ -3,13 +3,15 @@ resource "helm_release" "neuvector" {
   provider         = neuvector-helm
   repository       = "https://neuvector.github.io/neuvector-helm"
   name             = "neuvector"
-  chart            = "neuvector/core"
-  version          = "${neuvector_helm_chart_version}"
+  chart            = "core"
+  version          = "${var.neuvector_helm_chart_version}"
   namespace        = "neuvector"
   create_namespace = true
   wait             = true
   wait_for_jobs    = true
   verify           = false
+
+  depends_on = [var.neuvector_depends_on]
 
   set {
     name  = "tag"
@@ -19,6 +21,11 @@ resource "helm_release" "neuvector" {
   set {
     name  = "registry"
     value = "docker.io"
+  }
+
+  set {
+    name = "k3s.enabled"
+    value = "true"
   }
 
   set {

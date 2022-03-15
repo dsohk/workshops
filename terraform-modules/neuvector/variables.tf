@@ -15,6 +15,11 @@ variable "neuvector_helm_chart_version" {
 variable "neuvector_version" {
   type        = string
   description = "Version of neuvector to install (format: 0.0.0)"
-  default     = "5.0.0-preview.2"
+  default     = "5.0.0-preview.1"
+}
+
+variable "neuvector_depends_on" {
+  type    = any
+  default = []
 }
 

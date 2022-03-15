@@ -1,38 +1,26 @@
-# SUSE Cloud-Native Hands-on Workshop Series
+# Rancher Hands-on Workshop Series
 
-This is a series of hands-on workshops and demos to learn cloud-native technologies with Rancher, Longhorn, Neuvector, Harvester, and more.
+This repository contains a collection of terraform scripts to help you provision an environment for getting the first-hand experience of open source technologies such as Kubernetes, Rancher, Longhorn, Neuvector, etc.
 
-## Pre-requisites
+## System Requirements
 
-1. terraform 
-2. terragrunt
-3. helm
+1. terraform
+2. helm
 
 ## Start my Rancher Server on the Cloud
 
 Automate your very first instance of Rancher Server deployment on a cloud provider:
 
 1. [AWS](./scenarios/aws-ec2/rancher-server)
-2. [Azure](./scenarios/azure/rancher-server)
+2. Azure
+    * [Rancher Server on Single Node](./scenarios/azure/rancher-server)
+    * [HA-enabled Rancher Server on 3-Node Cluster](./scenarios/azure/rancher-server-ha)
 3. [Google Cloud Platform](./scenarios/gcp/rancher-server)
 
-## Hands-on Lab Series
+## Hands-on Workshop
 
-### Lab 1 - Onboarding Rancher Workshop
-
-You will learn how to ...
-
-* configure Rancher Server to have Keycloak as IdP for single-sign on.
-* enable audit logging and forward all the logs to a EFK cluster.
-
-This lab runs on Microsoft Azure. Please login to your Azure Portal and open Cloud Shell. At the bash terminal in the Cloud Shell, run the following commands to start the lab.
-
-```
-git clone https://github.com/dsohk/rancher-hands-on-workshops
-cd rancher-hands-on-workshops/zlab1
-./startlab.sh
-```
-
+1. [Rancher with Keycloak SSO + Log Forwarding to ElasticSearch](./scenarios/azure/rancher-keycloak-elastic)
+2. [Rancher and Neuvector](./scenarios/azure/rancher-neuvector)
 
 
 ## Contributing to this repository
