@@ -36,4 +36,5 @@ id_rsa.pub
 *.crt
 *.pem
 kube_config_server.yaml
+kubeconfig*.yaml
 ssh_*.*
