@@ -1,0 +1,24 @@
+registry: docker.io
+tag: ${neuvector_version}
+manager:
+  image:
+    repository: "neuvector/manager.preview"
+  ingress:
+    enabled: true
+    host: ${ingress_host}
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    tls: true
+    secretName: "neuvector-tls"
+controller:
+  image:
+    repository: "neuvector/controller.preview"
+enforcer:
+  image:
+    repository: "neuvector/enforcer.preview"
+cve:
+  scanner:
+    image:
+      repository: "neuvector/scanner.preview"
+k3s:
+  enabled: true

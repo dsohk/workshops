@@ -272,13 +272,14 @@ resource "local_file" "rke2_clusters_kubeconfig" {
   depends_on      = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
   count           = var.no_of_downstream_clusters
   filename        = format("${path.module}/kubeconfig-rke2-cluster%d.yaml", count.index + 1)
-  content = rancher2_cluster_v2.rke2_clusters[count.index].kube_config
+  content         = rancher2_cluster_v2.rke2_clusters[count.index].kube_config
   file_permission = "0600"
 }
 
 # install NecVector on RKE2 cluster[0]
 module "neuvector" {
   source                 = "../../../terraform-modules/neuvector"
+  ingress_host           = join(".", ["neuvector", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
   kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
-  neuvector_depends_on = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
+  neuvector_depends_on   = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
 }

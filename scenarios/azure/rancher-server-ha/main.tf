@@ -271,7 +271,7 @@ resource "random_password" "rancher_server_password" {
 
 locals {
   rancher_server_dns = join(".", ["rancher", azurerm_public_ip.rke2-lb-pip.ip_address, "sslip.io"])
-  rancher_password = random_password.rancher_server_password.result
+  rancher_password   = random_password.rancher_server_password.result
 }
 
 # Install cert-manager helm chart

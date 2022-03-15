@@ -18,6 +18,11 @@ variable "neuvector_version" {
   default     = "5.0.0-preview.1"
 }
 
+variable "ingress_host" {
+  type        = string
+  description = "hostname for ingress controller"
+}
+
 variable "neuvector_depends_on" {
   type    = any
   default = []
