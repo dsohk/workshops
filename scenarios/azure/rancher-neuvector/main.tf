@@ -263,6 +263,7 @@ resource "rancher2_cluster_v2" "rke2_clusters" {
 
 # Wait for 10 mins till RKE2 cluster is fully initialized
 resource "time_sleep" "wait_rke2_cluster_initialized_for_10mins" {
+  count           = var.no_of_downstream_clusters
   depends_on      = [rancher2_cluster_v2.rke2_clusters, azurerm_linux_virtual_machine.rke2_node]
   create_duration = "600s"
 }
@@ -281,5 +282,14 @@ module "neuvector" {
   source                 = "../../../terraform-modules/neuvector"
   ingress_host           = join(".", ["neuvector", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
   kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
-  neuvector_depends_on   = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
+  neuvector_depends_on   = [time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
 }
+
+module "harbor" {
+  source                 = "../../../terraform-modules/harbor"
+  harbor_ingress_host    = join(".", ["harbor", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
+  notary_ingress_host    = join(".", ["notary", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
+  kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
+  harbor_depends_on      = [time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
+}
+

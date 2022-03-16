@@ -23,3 +23,15 @@ output "neuvector_password" {
   value = module.neuvector.neuvector_password
 }
 
+output "harbor_url" {
+  value = module.harbor.harbor_url
+}
+
+output "harbor_user" {
+  value = module.harbor.harbor_user
+}
+
+output "harbor_password" {
+  sensitive = true
+  value     = module.harbor.harbor_password
+}
