@@ -1,0 +1,18 @@
+# https://github.com/goharbor/harbor-helm/blob/master/values.yaml
+
+expose:
+  type: ingress
+  tls:
+    enabled: true
+    certSource: secret
+    secret:
+      secretName: "harbor-tls"
+      notarySecretName: "harbor-tls"
+  ingress:
+    hosts:
+      core: ${harbor_ingress_host}
+      notary: ${notary_ingress_host}
+externalURL: ${external_url}
+harborAdminPassword: ${harbor_admin_password}
+persistence:
+  enabled: false

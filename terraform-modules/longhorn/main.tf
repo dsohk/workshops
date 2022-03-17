@@ -15,6 +15,9 @@ resource "helm_release" "longhorn" {
     name  = "persistence.defaultClassReplicaCount"
     value = var.persistence_default_class_replica_count
   }
+
+  depends_on = [var.longhorn_depends_on]
+  
 }
 
 # Wait for 30 seconds till longhorn is fully initialized

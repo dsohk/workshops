@@ -17,3 +17,8 @@ variable "storageclass_defaultclass" {
   description = "set as default storageclass"
   default     = "true"
 }
+
+variable "nfs_server_depends_on" {
+  type    = any
+  default = []
+}

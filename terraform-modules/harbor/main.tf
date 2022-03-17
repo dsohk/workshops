@@ -6,7 +6,7 @@ resource "tls_private_key" "harbor" {
 
 # harbor private key
 resource "local_file" "harbor_private_key_pem" {
-  filename          = "${path.module}/harbor.pem"
+  filename          = "${var.harbor_sslcert_path}/harbor.pem"
   sensitive_content = tls_private_key.harbor.private_key_pem
   file_permission   = "0600"
 }
@@ -40,7 +40,7 @@ resource "tls_self_signed_cert" "harbor" {
 
 # harbor certificate
 resource "local_file" "harbor_crt" {
-  filename          = "${path.module}/harbor.crt"
+  filename          = "${var.harbor_sslcert_path}/harbor.crt"
   sensitive_content = tls_self_signed_cert.harbor.cert_pem
   file_permission   = "0600"
 }

@@ -17,3 +17,8 @@ variable "persistence_default_class_replica_count" {
   description = "Longhorn's Default Class Replica Count (default: 3)"
   default     = 3
 }
+
+variable "longhorn_depends_on" {
+  type    = any
+  default = []
+}

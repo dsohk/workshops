@@ -6,7 +6,7 @@ resource "tls_private_key" "neuvector" {
 
 # neuvector private key
 resource "local_file" "neuvector_private_key_pem" {
-  filename          = "${path.module}/neuvector.pem"
+  filename          = "${var.neuvector_sslcert_path}/neuvector.pem"
   sensitive_content = tls_private_key.neuvector.private_key_pem
   file_permission   = "0600"
 }
@@ -40,7 +40,7 @@ resource "tls_self_signed_cert" "neuvector" {
 
 # neuvector certificate
 resource "local_file" "neuvector_crt" {
-  filename          = "${path.module}/neuvector.crt"
+  filename          = "${var.neuvector_sslcert_path}/neuvector.crt"
   sensitive_content = tls_self_signed_cert.neuvector.cert_pem
   file_permission   = "0600"
 }

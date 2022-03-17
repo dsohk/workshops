@@ -53,3 +53,8 @@ variable "windows_prefered_cluster" {
   description = "Activate windows supports for the custom workload cluster"
   default     = false
 }
+
+variable "rancher_depends_on" {
+  type    = any
+  default = []
+}

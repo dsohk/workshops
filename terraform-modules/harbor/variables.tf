@@ -6,6 +6,12 @@ variable "kubernetes_config_path" {
   description = "config path connecting to the kubernetes cluster where harbor is target to deploy to"
 }
 
+# Required
+variable "harbor_sslcert_path" {
+  type = string
+  description = "output path for harbor SSL cert (private key and cert)"
+}
+
 variable "harbor_helm_chart_version" {
   type        = string
   description = "Version of harbor to install (format: 0.0.0)"

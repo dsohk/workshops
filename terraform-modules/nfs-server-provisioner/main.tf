@@ -16,6 +16,8 @@ resource "helm_release" "nfs-server-provisioner" {
     value = var.storageclass_defaultclass
   }
 
+  depends_on = [var.nfs_server_depends_on]
+
 }
 
 # Wait for 30 seconds till nfs-server is fully initialized

@@ -11,6 +11,8 @@ resource "ssh_resource" "rke2_for_rancher" {
     })
   ]
 
+  depends_on = [var.rancher_depends_on]
+
 }
 
 resource "ssh_resource" "retrieve_config" {
@@ -42,6 +44,8 @@ resource "helm_release" "cert_manager" {
     name  = "installCRDs"
     value = "true"
   }
+
+  depends_on = [var.rancher_depends_on]
 }
 
 # Wait for 30 seconds till cert-manager is fully initialized
