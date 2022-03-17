@@ -108,3 +108,28 @@ resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
 }
 
+# Configure containerd runtime to accept self-signed harbor SSL cert
+resource "ssh_resource" "configure_containerd_for_harbor" {
+  count       = length(var.harbor_client)
+  depends_on  = [time_sleep.wait_30_seconds]
+  host        = var.harbor_client[count.index].node_ip
+  user        = var.harbor_client[count.index].username
+  private_key = var.harbor_client[count.index].private_key_pem
+
+  file {
+    content = templatefile(join("/", [path.module, "files/harbor-configure-containerd.sh"]),
+      {
+        HARBOR_URL = format("https://%s", var.harbor_ingress_host),
+        HARBOR_USR = "admin",
+        HARBOR_PWD = random_password.harbor_admin_password.result
+      }
+    )
+    destination = "/tmp/configure_containerd.sh"
+    permissions = "0700"
+  }
+
+  commands = [
+    "/tmp/configure_containerd.sh"
+  ]
+
+}

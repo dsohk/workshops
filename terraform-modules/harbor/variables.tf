@@ -8,8 +8,19 @@ variable "kubernetes_config_path" {
 
 # Required
 variable "harbor_sslcert_path" {
-  type = string
+  type        = string
   description = "output path for harbor SSL cert (private key and cert)"
+}
+
+# Required. Format:
+# harbor_client = [
+#   { node_ip = "127.0.0.1", username = "ec2-user", private_key_pem = "..." },
+#   { node_ip = "127.0.0.2", username = "ec2-user", ssh_key_pem = "..." }
+# ]
+variable "harbor_client" {
+  type        = list(any)
+  description = "list of ssh client keys to set the containerd runtime to accept harbor self-signed ssl cert"
+  default     = []
 }
 
 variable "harbor_helm_chart_version" {

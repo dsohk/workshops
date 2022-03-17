@@ -8,7 +8,7 @@ variable "kubernetes_config_path" {
 
 # required
 variable "neuvector_sslcert_path" {
-  type = string
+  type        = string
   description = "output path for neuvector SSL cert (private key and cert)"
 }
 

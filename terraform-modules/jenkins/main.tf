@@ -92,8 +92,8 @@ resource "helm_release" "jenkins" {
       {
         jenkins_admin_password = random_password.jenkins_admin_password.result,
         jenkins_ingress_host   = var.jenkins_ingress_host,
-        notary_ingress_host   = var.notary_ingress_host,
-        external_url          = format("https://%s", var.jenkins_ingress_host)
+        notary_ingress_host    = var.notary_ingress_host,
+        external_url           = format("https://%s", var.jenkins_ingress_host)
       }
     )
   ]
