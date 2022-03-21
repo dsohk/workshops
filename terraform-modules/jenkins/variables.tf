@@ -14,7 +14,7 @@ variable "jenkins_sslcert_path" {
 variable "jenkins_helm_chart_version" {
   type        = string
   description = "Version of jenkins to install (format: 0.0.0)"
-  default     = "1.6.2"
+  default     = "3.5.14"
 }
 
 variable "jenkins_ingress_host" {

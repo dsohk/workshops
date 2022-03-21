@@ -6,7 +6,7 @@ resource "tls_private_key" "jenkins" {
 
 # jenkins private key
 resource "local_file" "jenkins_private_key_pem" {
-  filename          = "${path.module}/jenkins.pem"
+  filename          = "${var.jenkins_sslcert_path}/jenkins.pem"
   sensitive_content = tls_private_key.jenkins.private_key_pem
   file_permission   = "0600"
 }
@@ -30,7 +30,7 @@ resource "tls_self_signed_cert" "jenkins" {
     "server_auth",
   ]
 
-  dns_names = [var.jenkins_ingress_host, var.notary_ingress_host]
+  dns_names = [var.jenkins_ingress_host]
 
   subject {
     common_name  = var.jenkins_ingress_host
@@ -40,7 +40,7 @@ resource "tls_self_signed_cert" "jenkins" {
 
 # jenkins certificate
 resource "local_file" "jenkins_crt" {
-  filename          = "${path.module}/jenkins.crt"
+  filename          = "${var.jenkins_sslcert_path}/jenkins.crt"
   sensitive_content = tls_self_signed_cert.jenkins.cert_pem
   file_permission   = "0600"
 }
@@ -76,7 +76,7 @@ resource "random_password" "jenkins_admin_password" {
 
 # Install jenkins helm chart
 resource "helm_release" "jenkins" {
-  repository       = "https://helm.gojenkins.io"
+  repository       = "https://charts.jenkins.io"
   name             = "jenkins"
   chart            = "jenkins"
   version          = var.jenkins_helm_chart_version
@@ -90,10 +90,8 @@ resource "helm_release" "jenkins" {
     templatefile(
       join("/", [path.module, "files/jenkins-helm-values.yaml"]),
       {
-        jenkins_admin_password = random_password.jenkins_admin_password.result,
-        jenkins_ingress_host   = var.jenkins_ingress_host,
-        notary_ingress_host    = var.notary_ingress_host,
-        external_url           = format("https://%s", var.jenkins_ingress_host)
+        jenkins_ingress_host   = var.jenkins_ingress_host
+        jenkins_admin_password = random_password.jenkins_admin_password.result
       }
     )
   ]

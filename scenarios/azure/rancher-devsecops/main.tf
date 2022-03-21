@@ -277,13 +277,46 @@ resource "local_file" "rke2_clusters_kubeconfig" {
   file_permission = "0600"
 }
 
-# install NecVector on RKE2 cluster[0]
+# enable nfs storage class
+module "nfs_server_provisioner" {
+  source                 = "../../../terraform-modules/nfs-server-provisioner"
+  kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
+  nfs_server_depends_on = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
+}
+
+# install harbor
+module "harbor" {
+  source                 = "../../../terraform-modules/harbor"
+  harbor_depends_on      = [module.nfs_server_provisioner, time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
+  harbor_ingress_host    = join(".", ["harbor", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
+  notary_ingress_host    = join(".", ["notary", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
+  kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
+  harbor_sslcert_path    = path.module
+  harbor_client = [{
+    "node_ip"         = azurerm_linux_virtual_machine.rke2_node[0].public_ip_address,
+    "username"        = local.node_username,
+    "private_key_pem" = tls_private_key.global_key.private_key_pem
+  }]
+}
+
+# install jenkins
+module "jenkins" {
+  source                 = "../../../terraform-modules/jenkins"
+  jenkins_ingress_host   = join(".", ["jenkins", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
+  kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
+  jenkins_sslcert_path   = path.module
+  jenkins_depends_on     = [module.harbor, time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
+}
+
+# install NecVector
 module "neuvector" {
   source                 = "../../../terraform-modules/neuvector"
   ingress_host           = join(".", ["neuvector", azurerm_linux_virtual_machine.rke2_node[0].public_ip_address, "sslip.io"])
   kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
   neuvector_sslcert_path = path.module
-  neuvector_depends_on   = [time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
+  neuvector_depends_on   = [module.harbor, time_sleep.wait_rke2_cluster_initialized_for_10mins[0]]
 }
+
+
 
 

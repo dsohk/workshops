@@ -1,18 +1,62 @@
-# https://github.com/goharbor/harbor-helm/blob/master/values.yaml
+# https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/README.md
 
-expose:
-  type: ingress
-  tls:
-    enabled: true
-    certSource: secret
-    secret:
-      secretName: "harbor-tls"
-      notarySecretName: "harbor-tls"
+controller:
+  image: "docker.io/susesamples/myjenkins"
+  tag: "v1.0"
+  imagePullPolicy: "Always"
+  installPlugins: false
+  serviceType: ClusterIP
+  # jenkinsUrl: ${jenkins_ingress_host}
+  # jenkinsUrlProtocol: https
+  adminUser: "admin"
+  adminPassword: ${jenkins_admin_password}
   ingress:
-    hosts:
-      core: ${harbor_ingress_host}
-      notary: ${notary_ingress_host}
-externalURL: ${external_url}
-harborAdminPassword: ${harbor_admin_password}
+    enabled: true
+    apiVersion: "networking.k8s.io/v1"
+    annotations: {}
+    hostname: ${jenkins_ingress_host}
+    tls:
+    - secretName: jenkins-tls
+      hosts:
+      - ${jenkins_ingress_host}
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "1024Mi"
+    limits:
+      cpu: "2000m"
+      memory: "2048Mi"
+  # sidecars:
+  #   configAutoReload:
+  #     enabled: false
+  #   other:
+  #   - name: smee
+  #     image: docker.io/twalter/smee-client:1.0.2
+  #     args: ["--port", "{{ .Values.controller.servicePort }}", "--path", "/github-webhook/", "--url", "https://smee.io/FqIskMikN91QAv7"]
+  #     resources:
+  #       limits:https://smee.io/
+  #         cpu: 50m
+  #         memory: 128Mi
+  #       requests:
+  #         cpu: 10m
+  #         memory: 32Mi
+  prometheus:
+    enabled: false
+    # Additional labels to add to the ServiceMonitor object
+    serviceMonitorAdditionalLabels: {}
+    # Set a custom namespace where to deploy ServiceMonitor resource
+    # serviceMonitorNamespace: monitoring
+    scrapeInterval: 60s
+    # This is the default endpoint used by the prometheus plugin
+    scrapeEndpoint: /prometheus
+    # Additional labels to add to the PrometheusRule object
+    alertingRulesAdditionalLabels: {}
+    # An array of prometheus alerting rules
+    # See here: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    # The `groups` root object is added by default, simply add the rule entries
+    alertingrules: []
+    # Set a custom namespace where to deploy PrometheusRule resource
+    prometheusRuleNamespace: ""
 persistence:
-  enabled: false
+  accessMode: "ReadWriteOnce"
+  size: "5Gi"
