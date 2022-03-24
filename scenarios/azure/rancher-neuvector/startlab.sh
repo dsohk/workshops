@@ -35,7 +35,8 @@ TENANT_ID=`az account list | jq -r .[0].tenantId`
 SUBSCRIPTION_ID=`az account subscription list | jq -r .[0].subscriptionId`
 
 ## Create or patch existing service pricinpal
-SERVICE_PRINCIPAL_NAME=`az account list | jq -r .[0].user.name | sed 's/[\@._+]/-/g'`
+SERVICE_PRINCIPAL_EMAIL=`az account list | jq -r .[0].user.name`
+SERVICE_PRINCIPAL_NAME=`echo $SERVICE_PRINCIPAL_EMAIL | sed 's/[\@._+]/-/g'`
 az ad sp create-for-rbac \
   --name $SERVICE_PRINCIPAL_NAME \
   --role contributor \

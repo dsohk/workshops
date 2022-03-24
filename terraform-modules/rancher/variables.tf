@@ -27,7 +27,7 @@ variable "ssh_private_key_pem" {
 variable "cert_manager_version" {
   type        = string
   description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.5.3"
+  default     = "1.7.1"
 }
 
 variable "rancher_version" {

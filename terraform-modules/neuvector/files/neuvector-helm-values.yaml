@@ -20,5 +20,8 @@ cve:
   scanner:
     image:
       repository: "neuvector/scanner.preview"
+  updater:
+    image:
+      repository: "neuvector/updater.preview"
 k3s:
   enabled: true

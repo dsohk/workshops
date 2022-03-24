@@ -281,7 +281,7 @@ resource "local_file" "rke2_clusters_kubeconfig" {
 module "nfs_server_provisioner" {
   source                 = "../../../terraform-modules/nfs-server-provisioner"
   kubernetes_config_path = local_file.rke2_clusters_kubeconfig[0].filename
-  nfs_server_depends_on = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
+  nfs_server_depends_on  = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
 }
 
 # install harbor
