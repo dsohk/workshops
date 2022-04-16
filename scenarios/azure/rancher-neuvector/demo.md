@@ -5,7 +5,19 @@
 * Login to Neuvector as admin with default password
 * Goto 
 
-## 2 Node, Container and Registry scanning
+## 2. Deploy Sample Application
+
+https://docs.neuvector.com/testing/testing
+
+## 3. Zero-trust Runtime Security
+
+## 4. Admission Control
+
+admission_demo.yaml
+
+## 5. Vulnerability scanning and Compliance check
+
+Node, Container and Registry scanning
 
 Assets > Registries
 
@@ -30,7 +42,7 @@ Add: Add
 Turn Status = enabled
 Mode = Monitor
 
-## 3. Zero-trust Runtime Security
+## 3. Runtime Security
 
 Policy > Groups - Move Pods in namespace from Discover to Monitor/Protect
 

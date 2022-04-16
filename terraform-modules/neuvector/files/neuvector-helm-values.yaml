@@ -2,7 +2,7 @@ registry: docker.io
 tag: ${neuvector_version}
 manager:
   image:
-    repository: "neuvector/manager.preview"
+    repository: "neuvector/manager"
   ingress:
     enabled: true
     host: ${ingress_host}
@@ -12,16 +12,16 @@ manager:
     secretName: "neuvector-tls"
 controller:
   image:
-    repository: "neuvector/controller.preview"
+    repository: "neuvector/controller"
 enforcer:
   image:
-    repository: "neuvector/enforcer.preview"
+    repository: "neuvector/enforcer"
 cve:
   scanner:
     image:
-      repository: "neuvector/scanner.preview"
+      repository: "neuvector/scanner"
   updater:
     image:
-      repository: "neuvector/updater.preview"
+      repository: "neuvector/updater"
 k3s:
   enabled: true

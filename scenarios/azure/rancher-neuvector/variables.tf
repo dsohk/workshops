@@ -99,18 +99,6 @@ variable "rke2_node_vm_size" {
   default     = "Standard_B4ms"
 }
 
-variable "rancher_version" {
-  type        = string
-  description = "Rancher server version (format: v0.0.0)"
-  default     = "v2.6.3"
-}
-
-variable "cert_manager_version" {
-  type        = string
-  description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.7.1"
-}
-
 # Required
 variable "add_windows_node" {
   type        = bool

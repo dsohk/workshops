@@ -138,8 +138,6 @@ module "rancher_server" {
   node_username       = local.node_username
   ssh_private_key_pem = tls_private_key.global_key.private_key_pem
 
-  cert_manager_version              = var.cert_manager_version
-  rancher_version                   = var.rancher_version
   rancher_server_dns                = join(".", ["rancher", azurerm_linux_virtual_machine.rancher_server.public_ip_address, "sslip.io"])
   rancher_server_bootstrap_password = random_password.rancher_server_password.result
 
