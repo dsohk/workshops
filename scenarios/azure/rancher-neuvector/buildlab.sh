@@ -33,7 +33,7 @@ AZ_BLOB_URL="https://${AZ_STORAGE_ACCOUNT}.blob.core.windows.net"
 AZ_BLOB_TARGET="${AZ_BLOB_URL}/${AZ_BLOB_CONTAINER}/"
 
 echo "Zipping the files for upload..."
-zip $WEBFILE.zip lab-credentials.json kube_config_server.yaml keycloak.*
+zip $WEBFILE.zip lab-credentials.json kubeconfig-rke2-cluster1.yaml
 
 echo "Upload file ..."
 curl -X PUT \
