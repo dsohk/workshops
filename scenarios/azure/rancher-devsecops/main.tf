@@ -232,7 +232,7 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
       "echo 'Waiting for cloud-init to complete...'",
       "cloud-init status --wait > /dev/null",
       "echo 'Completed cloud-init!'",
-      format("%s --etcd --controlplane --worker", rancher2_cluster_v2.rke2_clusters[count.index].cluster_registration_token.0.insecure_node_command)
+      format("%s --etcd --controlplane --worker --address %s", rancher2_cluster_v2.rke2_clusters[count.index].cluster_registration_token.0.insecure_node_command, self.public_ip_address)
     ]
 
     connection {
