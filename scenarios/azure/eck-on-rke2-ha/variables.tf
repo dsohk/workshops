@@ -74,6 +74,12 @@ variable "tag_project" {
   default     = "Demo"
 }
 
+variable "tag_ms-resource-usage" {
+  type = string
+  description = "Tag for tracking resource usage in Microsoft Azure Cost Management"
+  default = "My Project Name"
+}
+
 
 # spec: https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
 # pricing: https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
