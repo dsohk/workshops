@@ -48,6 +48,15 @@ resource "azurerm_subnet" "rancher-subnet" {
   address_prefixes     = ["10.0.0.0/24"]
 }
 
+# create azure container registry
+resource "azurerm_container_registry" "myregistry" {
+  name                = "${var.resource_group_name}"
+  resource_group_name = azurerm_resource_group.rancher.name
+  location            = azurerm_resource_group.rancher.location
+  sku                 = "Standard"
+  admin_enabled       = true
+}
+
 # Public IP of Rancher server
 resource "azurerm_public_ip" "rancher-server-pip" {
   name                = "rancher-server-pip"
@@ -298,6 +307,7 @@ module "harbor" {
     "private_key_pem" = tls_private_key.global_key.private_key_pem
   }]
 }
+
 
 
 

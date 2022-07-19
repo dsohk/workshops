@@ -23,3 +23,17 @@ output "harbor_password" {
   sensitive = true
   value     = module.harbor.harbor_password
 }
+
+output "acr_url" {
+  value = azurerm_container_registry.myregistry.login_server
+}
+
+output "acr_admin_username" {
+  value = azurerm_container_registry.myregistry.admin_username
+}
+
+output "acr_admin_password" {
+  sensitive = true
+  value = azurerm_container_registry.myregistry.admin_password
+}
+

@@ -125,7 +125,7 @@ resource "ssh_resource" "configure_containerd_for_harbor" {
       }
     )
     destination = "/tmp/configure_containerd.sh"
-    permissions = "0700"
+    permissions = "0755"
   }
 
   commands = [

@@ -19,7 +19,7 @@ Login to your Azure portal, start the [Cloud Shell](https://docs.microsoft.com/e
 
 ```
 git clone https://github.com/dsohk/rancher-hands-on-workshops
-cd rancher-hands-on-workshops/scenarios/azure/rancher-harbor
+cd rancher-hands-on-workshops/scenarios/azure/rancher-harbor-acr
 ./startlab.sh
 ```
 
