@@ -75,9 +75,9 @@ variable "tag_project" {
 }
 
 variable "tag_ms-resource-usage" {
-  type = string
+  type        = string
   description = "Tag for tracking resource usage in Microsoft Azure Cost Management"
-  default = "My Project Name"
+  default     = "My Project Name"
 }
 
 

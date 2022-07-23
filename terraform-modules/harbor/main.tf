@@ -13,8 +13,9 @@ resource "local_file" "harbor_private_key_pem" {
 
 # harbor self-signed cert
 resource "tls_self_signed_cert" "harbor" {
-  key_algorithm   = tls_private_key.harbor.algorithm
-  private_key_pem = tls_private_key.harbor.private_key_pem
+  key_algorithm     = tls_private_key.harbor.algorithm
+  private_key_pem   = tls_private_key.harbor.private_key_pem
+  is_ca_certificate = true
 
   # Certificate expires after 365 days.
   validity_period_hours = 8760
@@ -109,27 +110,77 @@ resource "time_sleep" "wait_30_seconds" {
 }
 
 # Configure containerd runtime to accept self-signed harbor SSL cert
-resource "ssh_resource" "configure_containerd_for_harbor" {
-  count       = length(var.harbor_client)
-  depends_on  = [time_sleep.wait_30_seconds]
-  host        = var.harbor_client[count.index].node_ip
-  user        = var.harbor_client[count.index].username
-  private_key = var.harbor_client[count.index].private_key_pem
+resource "null_resource" "upload_harbor_config" {
+  count      = length(var.harbor_client)
+  depends_on = [time_sleep.wait_30_seconds]
 
-  file {
-    content = templatefile(join("/", [path.module, "files/harbor-configure-containerd.sh"]),
-      {
-        HARBOR_URL = format("https://%s", var.harbor_ingress_host),
-        HARBOR_USR = "admin",
-        HARBOR_PWD = random_password.harbor_admin_password.result
-      }
-    )
-    destination = "/tmp/configure_containerd.sh"
-    permissions = "0755"
+  connection {
+    type        = "ssh"
+    host        = var.harbor_client[count.index].node_ip
+    user        = var.harbor_client[count.index].username
+    private_key = var.harbor_client[count.index].private_key_pem
   }
 
-  commands = [
-    "/tmp/configure_containerd.sh"
-  ]
+  provisioner "file" {
+    content = templatefile(join("/", [path.module, "files/harbor-rke2-registries.yaml"]),
+      {
+        HARBOR_HOST = var.harbor_ingress_host,
+        HARBOR_URL  = format("https://%s", var.harbor_ingress_host),
+        HARBOR_USR  = "admin",
+        HARBOR_PWD  = random_password.harbor_admin_password.result
+    })
+    destination = "/tmp/registries.yaml"
+  }
+
+  provisioner "file" {
+    source      = "${var.harbor_sslcert_path}/harbor.crt"
+    destination = "/tmp/harbor.crt"
+  }
+
+  provisioner "file" {
+    source      = join("/", [path.module, "files/harbor-configure-containerd.sh"])
+    destination = "/tmp/harbor-configure-containerd.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/harbor-configure-containerd.sh",
+      "/tmp/harbor-configure-containerd.sh",
+    ]
+  }
+
+}
+
+# upload sample image to harbor
+resource "null_resource" "upload_image_to_harbor" {
+  count      = length(var.harbor_client)
+  depends_on = [null_resource.upload_harbor_config]
+
+  connection {
+    type        = "ssh"
+    host        = var.harbor_client[count.index].node_ip
+    user        = var.harbor_client[count.index].username
+    private_key = var.harbor_client[count.index].private_key_pem
+  }
+
+  provisioner "file" {
+    content = templatefile(join("/", [path.module, "files/harbor-upload-images.sh"]),
+      {
+        HARBOR_HOST = var.harbor_ingress_host,
+        HARBOR_URL  = format("https://%s", var.harbor_ingress_host),
+        HARBOR_USR  = "admin",
+        HARBOR_PWD  = random_password.harbor_admin_password.result,
+        SRC_IMAGE   = "rancher/hello-world:v0.1.2"
+        DEST_IMAGE  = "library/hello-world:v0.1.2"
+    })
+    destination = "/tmp/harbor-upload-images.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/harbor-upload-images.sh",
+      "sudo /tmp/harbor-upload-images.sh",
+    ]
+  }
 
 }

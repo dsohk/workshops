@@ -1,0 +1,8 @@
+configs:
+  "${HARBOR_HOST}":
+    auth:
+      username: ${HARBOR_USR}
+      password: ${HARBOR_PWD}
+    tls:
+      ca_file: /etc/rancher/rke2/harbor.crt
+      insecure_skip_verify: true

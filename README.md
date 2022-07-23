@@ -20,7 +20,8 @@ Automate your very first instance of Rancher Server deployment on a cloud provid
 ## Hands-on Workshop
 
 1. [Rancher with Keycloak SSO + Log Forwarding to ElasticSearch](./scenarios/azure/rancher-keycloak-elastic)
-2. [Rancher and Neuvector](./scenarios/azure/rancher-neuvector)
+2. [Deploy and Manage Microservices with Rancher, Istio and NeuVector](./scenarios/azure/rancher-neuvector)
+3. [Rancher and Private Registry - Harbor and Azure Container Registry](./scenarios/azure/rancher-harbor-acr)
 
 
 ## Contributing to this repository

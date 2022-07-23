@@ -34,6 +34,6 @@ output "acr_admin_username" {
 
 output "acr_admin_password" {
   sensitive = true
-  value = azurerm_container_registry.myregistry.admin_password
+  value     = azurerm_container_registry.myregistry.admin_password
 }
 

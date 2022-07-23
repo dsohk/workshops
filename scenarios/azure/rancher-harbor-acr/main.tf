@@ -50,7 +50,7 @@ resource "azurerm_subnet" "rancher-subnet" {
 
 # create azure container registry
 resource "azurerm_container_registry" "myregistry" {
-  name                = "${var.resource_group_name}"
+  name                = var.resource_group_name
   resource_group_name = azurerm_resource_group.rancher.name
   location            = azurerm_resource_group.rancher.location
   sku                 = "Standard"
@@ -179,7 +179,7 @@ resource "azurerm_public_ip" "rke2-nodes-pip" {
   name                = format("rke2-node%d-pip", count.index + 1)
   location            = azurerm_resource_group.rancher.location
   resource_group_name = azurerm_resource_group.rancher.name
-  allocation_method   = "Dynamic"
+  allocation_method   = var.rancher_server_use_static_public_ip ? "Static" : "Dynamic"
 
 }
 
