@@ -77,7 +77,7 @@ variable "instance_type" {
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format: v0.0.0)"
-  default     = "v2.6.3"
+  default     = "v2.6.6"
 }
 
 variable "cert_manager_version" {
