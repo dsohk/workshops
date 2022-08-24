@@ -9,7 +9,7 @@ variable "kubernetes_config_path" {
 variable "longhorn_version" {
   type        = string
   description = "Version of longhorn to install (format: 0.0.0)"
-  default     = "1.2"
+  default     = "1.3.1"
 }
 
 variable "persistence_default_class_replica_count" {
