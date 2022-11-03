@@ -1,4 +1,4 @@
-# Rancher Server + Neuvector
+# Rancher Server + RKE2 All-in-one cluster x N
 
 ## Introduction
 
@@ -6,9 +6,9 @@ This terraform script will build out an environment as follows.
 
 1. Single Node VM with the following software components installed.
 
-* Rancher Server 2.6.3 on RKE2
+* Rancher Server 2.6.9 on RKE2
 
-2. One downstream all-in-one RKE2-based cluster with Neuvector deployed on it.
+2. N downstream all-in-one RKE2-based cluster.
 
 ## Setup
 
@@ -16,7 +16,7 @@ Login to your Azure portal, start the [Cloud Shell](https://docs.microsoft.com/e
 
 ```
 git clone https://github.com/dsohk/workshops
-cd workshops/scenarios/azure/rancher-neuvector
+cd workshops/scenarios/azure/rancher-with-n-rke2-clusters
 ./startlab.sh
 ```
 
