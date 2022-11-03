@@ -33,7 +33,7 @@ variable "cert_manager_version" {
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format v0.0.0)"
-  default     = "v2.6.7"
+  default     = "v2.6.9"
 }
 
 # Required

@@ -22,7 +22,7 @@ terraform {
     }
     rancher2 = {
       source  = "rancher/rancher2"
-      version = "1.22.2"
+      version = "1.24.2"
     }
   }
   required_version = ">= 0.14.9"

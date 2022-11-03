@@ -254,7 +254,7 @@ resource "rancher2_cluster_v2" "rke2_clusters" {
   count                                    = var.no_of_downstream_clusters
   provider                                 = rancher2.admin
   name                                     = format("rke2-cluster%d", count.index + 1)
-  kubernetes_version                       = "v1.23.13+rke2r2"
+  kubernetes_version                       = "v1.24.4+rke2r1" # use the tags in here: https://hub.docker.com/r/rancher/system-agent-installer-rke2/tags
   enable_network_policy                    = false
   default_cluster_role_for_project_members = "user"
 }
