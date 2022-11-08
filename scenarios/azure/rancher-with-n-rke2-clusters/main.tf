@@ -223,6 +223,7 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
+    disk_size_gb         = 30
   }
 
   provisioner "remote-exec" {
@@ -259,20 +260,36 @@ resource "rancher2_cluster_v2" "rke2_clusters" {
   default_cluster_role_for_project_members = "user"
 }
 
-# Wait for 10 mins till RKE2 cluster is fully initialized
-resource "time_sleep" "wait_rke2_cluster_initialized_for_10mins" {
-  count           = var.no_of_downstream_clusters
-  depends_on      = [rancher2_cluster_v2.rke2_clusters, azurerm_linux_virtual_machine.rke2_node]
-  create_duration = "600s"
+resource "rancher2_cluster_sync" "cluster_sync" {
+  provider      = rancher2.admin
+  count         = var.no_of_downstream_clusters
+  cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
+  wait_catalogs = true
+  state_confirm = 6 # try to confirm the active state for 6 times x 5s-interval
 }
 
 # kubeconfig file for RKE2 clusters
 resource "local_file" "rke2_clusters_kubeconfig" {
-  depends_on      = [time_sleep.wait_rke2_cluster_initialized_for_10mins]
   count           = var.no_of_downstream_clusters
   filename        = format("${path.module}/kubeconfig-rke2-cluster%d.yaml", count.index + 1)
-  content         = rancher2_cluster_v2.rke2_clusters[count.index].kube_config
+  content         = rancher2_cluster_sync.cluster_sync[count.index].kube_config
   file_permission = "0600"
 }
 
+# Enable longhorn on the RKE2 clusters
+resource "rancher2_app_v2" "longhorn" {
+  provider      = rancher2.admin
+  count         = var.no_of_downstream_clusters
+  cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id # See https://github.com/rancher/terraform-provider-rancher2/issues/848
+  name          = "longhorn"
+  namespace     = "longhorn-system"
+  repo_name     = "rancher-charts"
+  chart_name    = "longhorn"
+  chart_version = "100.2.3+up1.3.2"
+  values        = file(join("/", [path.module, "files/longhorn-values.yaml"]))
+  timeouts {
+    create = "30m"
+    delete = "30m"
+  }
+}
 
