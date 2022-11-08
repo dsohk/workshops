@@ -223,7 +223,7 @@ resource "azurerm_linux_virtual_machine" "rke2_node" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
-    disk_size_gb         = 30
+    disk_size_gb         = 60
   }
 
   provisioner "remote-exec" {
@@ -265,7 +265,7 @@ resource "rancher2_cluster_sync" "cluster_sync" {
   count         = var.no_of_downstream_clusters
   cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
   wait_catalogs = true
-  state_confirm = 6 # try to confirm the active state for 6 times x 5s-interval
+  state_confirm = 24 # try to confirm the active state for 12 times x 5s-interval (2 min)
 }
 
 # kubeconfig file for RKE2 clusters
