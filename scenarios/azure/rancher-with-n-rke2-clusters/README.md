@@ -1,4 +1,4 @@
-# Rancher Server + RKE2 All-in-one cluster x N
+# Rancher Server + multiple RKE2 All-in-one cluster
 
 ## Introduction
 
@@ -8,7 +8,7 @@ This terraform script will build out an environment as follows.
 
 * Rancher Server 2.6.9 on RKE2
 
-2. N downstream all-in-one RKE2-based cluster.
+2. Multiple downstream all-in-one RKE2-based clusters with longhorn storage installed.
 
 ## Setup
 
