@@ -5,7 +5,7 @@ terraform init
 retry=0
 while [ $retry -le 5 ]
 do
-  touch ./kubeconfig-rke2-cluster1.yaml
+  touch ./kube_config_server.yaml
   terraform plan -out tfplan 
   terraform apply -auto-approve tfplan
   status=$?
@@ -33,7 +33,7 @@ AZ_BLOB_URL="https://${AZ_STORAGE_ACCOUNT}.blob.core.windows.net"
 AZ_BLOB_TARGET="${AZ_BLOB_URL}/${AZ_BLOB_CONTAINER}/"
 
 echo "Zipping the files for upload..."
-zip $WEBFILE.zip lab-credentials.json kubeconfig-rke2-cluster1.yaml
+zip $WEBFILE.zip lab-credentials.json kube_config_server.yaml
 
 echo "Upload file ..."
 curl -X PUT \
