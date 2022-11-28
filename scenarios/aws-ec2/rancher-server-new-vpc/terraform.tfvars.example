@@ -1,0 +1,8 @@
+aws_access_key        = "..."
+aws_secret_key        = "..."
+aws_region            = "us-east-1"
+prefix                = "demo"
+tag_owner             = "Consultant"
+linux_instance_type   = "t3a.large"
+windows_instance_type = "t3a.xlarge"
+add_windows_node      = false

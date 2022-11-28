@@ -1,0 +1,12 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+  - name: sshd.service
+    enabled: true
+passwd:
+  users:
+   - name: root
+     password_hash: "$6$PfKm6Fv5WbqOvZ0C$g4kByYM.D2B5GCsgluuqDNL87oeXiHqctr6INNNmF75WPGgkLn9O9uVx4iEe3UdbbhaHbTJ1vpZymKWuDIrWI1"
+     ssh_authorized_keys: 
+       - ssh-rsa long...key user@host
