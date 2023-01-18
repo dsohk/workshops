@@ -30,7 +30,13 @@ variable "tag_owner" {
   default     = "demo"
 }
 
-variable "linux_instance_type" {
+variable "linux_master_instance_type" {
+  type        = string
+  description = "Instance type used for all EC2 instances"
+  default     = "t3a.large"
+}
+
+variable "linux_worker_instance_type" {
   type        = string
   description = "Instance type used for all EC2 instances"
   default     = "t3a.large"
@@ -45,13 +51,13 @@ variable "windows_instance_type" {
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format: v0.0.0)"
-  default     = "v2.6.9"
+  default     = "v2.7.0"
 }
 
 variable "cert_manager_version" {
   type        = string
   description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.7.1"
+  default     = "1.10.0"
 }
 
 # Required

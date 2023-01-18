@@ -33,13 +33,13 @@ module "vpc" {
   name = "rancher-vpc"
   cidr = "10.0.0.0/16"
 
-  # setup multiple AZ
+  # setup multiple AZ with public subnets only
   azs             = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  # private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
-  enable_nat_gateway     = true
-  single_nat_gateway     = true
+  enable_nat_gateway     = false
+  single_nat_gateway     = false
   one_nat_gateway_per_az = false
   enable_vpn_gateway     = false
 
@@ -134,7 +134,7 @@ resource "aws_eip" "rancher_server_eip" {
 # Single-Node Rancher Server VM
 resource "aws_instance" "rancher_server" {
   ami           = data.aws_ami.sles_x86.id
-  instance_type = var.linux_instance_type
+  instance_type = var.linux_master_instance_type
   key_name      = aws_key_pair.ec2_key_pair.key_name
 
   root_block_device {
@@ -248,18 +248,18 @@ locals {
 
 resource "rancher2_machine_config_v2" "rke2-master" {
   provider      = rancher2.admin
-  count         = length(module.vpc.private_subnets)
+  count         = length(module.vpc.public_subnets)
   generate_name = "rke2-master"
   amazonec2_config {
     ami                  = data.aws_ami.sles_x86.id
     region               = var.aws_region
     security_group       = [aws_security_group.rke_node_sg.name]
-    subnet_id            = module.vpc.private_subnets[count.index]
-    private_address_only = true
+    subnet_id            = module.vpc.public_subnets[count.index]
+    private_address_only = false
     vpc_id               = module.vpc.vpc_id
     zone                 = local.azs[count.index]
     iam_instance_profile = module.aws_iam_rke.rke_master_iam_instance_profile
-    instance_type        = var.linux_instance_type
+    instance_type        = var.linux_master_instance_type
     keypair_name         = aws_key_pair.ec2_key_pair.key_name
     ssh_key_contents     = tls_private_key.global_key.public_key_openssh
     ssh_user             = local.node_username
@@ -269,18 +269,18 @@ resource "rancher2_machine_config_v2" "rke2-master" {
 
 resource "rancher2_machine_config_v2" "rke2-worker" {
   provider      = rancher2.admin
-  count         = length(module.vpc.private_subnets)
+  count         = length(module.vpc.public_subnets)
   generate_name = "rke2-worker"
   amazonec2_config {
     ami                  = data.aws_ami.sles_x86.id
     region               = var.aws_region
     security_group       = [aws_security_group.rke_node_sg.name]
-    subnet_id            = module.vpc.private_subnets[count.index]
-    private_address_only = true
+    subnet_id            = module.vpc.public_subnets[count.index]
+    private_address_only = false
     vpc_id               = module.vpc.vpc_id
     zone                 = local.azs[count.index]
     iam_instance_profile = module.aws_iam_rke.rke_worker_iam_instance_profile
-    instance_type        = var.linux_instance_type
+    instance_type        = var.linux_worker_instance_type
     keypair_name         = aws_key_pair.ec2_key_pair.key_name
     ssh_key_contents     = tls_private_key.global_key.public_key_openssh
     ssh_user             = local.node_username
@@ -396,9 +396,7 @@ resource "aws_efs_file_system_policy" "policy" {
             },
             "Resource": "${aws_efs_file_system.rke2_efs.arn}",
             "Action": [
-                "elasticfilesystem:ClientMount",
-                "elasticfilesystem:ClientRootAccess",
-                "elasticfilesystem:ClientWrite"
+                "elasticfilesystem:*"
             ],
             "Condition": {
                 "Bool": {
@@ -413,9 +411,9 @@ POLICY
 # Creating the AWS EFS Mount point in a specified Subnet 
 # AWS EFS Mount point uses File system ID to launch.
 resource "aws_efs_mount_target" "rke2_efs_mount" {
-  count          = length(module.vpc.private_subnets)
+  count          = length(module.vpc.public_subnets)
   file_system_id = aws_efs_file_system.rke2_efs.id
-  subnet_id      = module.vpc.private_subnets[count.index]
+  subnet_id      = module.vpc.public_subnets[count.index]
 }
 
 # https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html
