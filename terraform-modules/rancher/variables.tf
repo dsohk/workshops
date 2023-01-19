@@ -30,6 +30,14 @@ variable "cert_manager_version" {
   default     = "1.10.0"
 }
 
+variable "rancher_helm_repo" {
+  type        = string
+  description = "Rancher helm chart repository URL"
+  # default     = "https://releases.rancher.com/server-charts/latest"
+  default     = "https://charts.rancher.com/server-charts/prime"
+}
+
+
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format v0.0.0)"

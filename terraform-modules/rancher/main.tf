@@ -59,7 +59,7 @@ resource "helm_release" "rancher_server" {
 
   depends_on = [time_sleep.wait_30_seconds]
 
-  repository       = "https://releases.rancher.com/server-charts/latest"
+  repository       = var.rancher_helm_repo
   name             = "rancher"
   chart            = "rancher"
   version          = var.rancher_version
