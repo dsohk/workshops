@@ -29,14 +29,14 @@ data "aws_ami" "opensuse_x86" {
   }
 }
 
-# Use latest SLES 15 SP4 BYOS
+# Use latest SLES 15 SP3 BYOS
 data "aws_ami" "sles_x86" {
   most_recent = true
   owners      = ["013907871322"] # SUSE
 
   filter {
     name   = "name"
-    values = ["suse-sles-15-sp4-byos-*"]
+    values = ["suse-sles-15-sp3-byos-*"]
   }
 
   filter {
