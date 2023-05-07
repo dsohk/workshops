@@ -41,7 +41,11 @@ variable "rancher_helm_repo" {
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format v0.0.0)"
+<<<<<<< Updated upstream
   default     = "v2.7.0"
+=======
+  default     = "v2.7.1"
+>>>>>>> Stashed changes
 }
 
 # Required

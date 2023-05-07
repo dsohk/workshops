@@ -92,37 +92,49 @@ resource "aws_security_group_rule" "rancher_server_ingress_rules" {
 }
 
 # Single-Node Rancher Server VM
-resource "aws_instance" "rancher_server" {
-  ami           = data.aws_ami.sles_x86.id
-  instance_type = var.linux_instance_type
-
-  key_name        = aws_key_pair.ec2_key_pair.key_name
-  security_groups = [aws_security_group.rancher_server_sg.name]
-
-  root_block_device {
-    volume_size = 20
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "echo 'Waiting for cloud-init to complete...'",
-      "cloud-init status --wait > /dev/null",
-      "echo 'Completed cloud-init!'",
-    ]
-
-    connection {
-      type        = "ssh"
-      host        = self.public_ip
-      user        = local.node_username
-      private_key = tls_private_key.global_key.private_key_pem
-    }
-  }
-
+# Create a new GitLab Lightsail Instance
+resource "aws_lightsail_instance" "gitlab_test" {
+  name              = "rancher_server"
+  availability_zone = "us-east-1b"
+  blueprint_id      = "amazon_linux"
+  bundle_id         = "medium_2_0"
+  key_pair_name     = "aws_key_pair.ec2_key_pair.key_name"
   tags = {
-    Name  = "${var.prefix}-rancher-server"
-    Owner = var.tag_owner
+    foo = "bar"
   }
 }
+
+# resource "aws_instance" "rancher_server" {
+#   ami           = data.aws_ami.sles_x86.id
+#   instance_type = var.linux_instance_type
+
+#   key_name        = aws_key_pair.ec2_key_pair.key_name
+#   security_groups = [aws_security_group.rancher_server_sg.name]
+
+#   root_block_device {
+#     volume_size = 20
+#   }
+
+#   provisioner "remote-exec" {
+#     inline = [
+#       "echo 'Waiting for cloud-init to complete...'",
+#       "cloud-init status --wait > /dev/null",
+#       "echo 'Completed cloud-init!'",
+#     ]
+
+#     connection {
+#       type        = "ssh"
+#       host        = self.public_ip
+#       user        = local.node_username
+#       private_key = tls_private_key.global_key.private_key_pem
+#     }
+#   }
+
+#   tags = {
+#     Name  = "${var.prefix}-rancher-server"
+#     Owner = var.tag_owner
+#   }
+# }
 
 # ssh command file for Rancher Server VM
 resource "local_file" "ssh_to_rancher_server" {

@@ -242,10 +242,11 @@ resource "aws_security_group" "rke_node_sg" {
 
 }
 
-locals {
-  azs = ["a", "b", "c"]
-}
+# locals {
+#   azs = ["a", "b", "c"]
+# }
 
+<<<<<<< Updated upstream
 resource "rancher2_machine_config_v2" "rke2-master" {
   provider      = rancher2.admin
   count         = length(module.vpc.public_subnets)
@@ -287,96 +288,140 @@ resource "rancher2_machine_config_v2" "rke2-worker" {
     root_size            = 30 # 30GB root disk
   }
 }
+=======
+# resource "rancher2_machine_config_v2" "rke2-master" {
+#   provider      = rancher2.admin
+#   count         = length(module.vpc.private_subnets)
+#   generate_name = "rke2-master"
+#   amazonec2_config {
+#     ami                  = data.aws_ami.sles_x86.id
+#     region               = var.aws_region
+#     security_group       = [aws_security_group.rke_node_sg.name]
+#     subnet_id            = module.vpc.private_subnets[count.index]
+#     private_address_only = true
+#     vpc_id               = module.vpc.vpc_id
+#     zone                 = local.azs[count.index]
+#     iam_instance_profile = module.aws_iam_rke.rke_master_iam_instance_profile
+#     instance_type        = var.linux_instance_type
+#     keypair_name         = aws_key_pair.ec2_key_pair.key_name
+#     ssh_key_contents     = tls_private_key.global_key.public_key_openssh
+#     ssh_user             = local.node_username
+#     root_size            = 30 # 30GB root disk
+#   }
+# }
 
-locals {
-  rke2_worker_machine_configs = [for config in rancher2_machine_config_v2.rke2-worker :
-    {
-      kind = config.kind
-      name = config.name
-    }
-  ]
-}
+# resource "rancher2_machine_config_v2" "rke2-worker" {
+#   provider      = rancher2.admin
+#   count         = length(module.vpc.private_subnets)
+#   generate_name = "rke2-worker"
+#   amazonec2_config {
+#     ami                  = data.aws_ami.sles_x86.id
+#     region               = var.aws_region
+#     security_group       = [aws_security_group.rke_node_sg.name]
+#     subnet_id            = module.vpc.private_subnets[count.index]
+#     private_address_only = true
+#     vpc_id               = module.vpc.vpc_id
+#     zone                 = local.azs[count.index]
+#     iam_instance_profile = module.aws_iam_rke.rke_worker_iam_instance_profile
+#     instance_type        = var.linux_instance_type
+#     keypair_name         = aws_key_pair.ec2_key_pair.key_name
+#     ssh_key_contents     = tls_private_key.global_key.public_key_openssh
+#     ssh_user             = local.node_username
+#     root_size            = 30 # 30GB root disk
+#   }
+# }
+>>>>>>> Stashed changes
 
-# Create a new rancher v2 amazonec2 RKE2 Cluster v2
-resource "rancher2_cluster_v2" "rke2" {
-  provider                                 = rancher2.admin
-  name                                     = "rke2-on-ec2"
-  kubernetes_version                       = "v1.24.4+rke2r1"
-  enable_network_policy                    = false
-  default_cluster_role_for_project_members = "user"
-  rke_config {
-    machine_pools {
-      name                         = "master"
-      cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
-      control_plane_role           = true
-      etcd_role                    = true
-      worker_role                  = false
-      quantity                     = 1
-      machine_config {
-        kind = rancher2_machine_config_v2.rke2-master[0].kind
-        name = rancher2_machine_config_v2.rke2-master[0].name
-      }
-    }
-    machine_pools {
-      name                         = "worker-a"
-      cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
-      control_plane_role           = false
-      etcd_role                    = false
-      worker_role                  = true
-      quantity                     = 1
-      machine_config {
-        kind = rancher2_machine_config_v2.rke2-worker[0].kind
-        name = rancher2_machine_config_v2.rke2-worker[0].name
-      }
-    }
-    machine_pools {
-      name                         = "worker-b"
-      cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
-      control_plane_role           = false
-      etcd_role                    = false
-      worker_role                  = true
-      quantity                     = 1
-      machine_config {
-        kind = rancher2_machine_config_v2.rke2-worker[1].kind
-        name = rancher2_machine_config_v2.rke2-worker[1].name
-      }
-    }
-    machine_pools {
-      name                         = "worker-c"
-      cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
-      control_plane_role           = false
-      etcd_role                    = false
-      worker_role                  = true
-      quantity                     = 1
-      machine_config {
-        kind = rancher2_machine_config_v2.rke2-worker[2].kind
-        name = rancher2_machine_config_v2.rke2-worker[2].name
-      }
-    }
-    machine_selector_config {
-      config = {
-        cloud-provider-name = "aws"
-      }
-    }
-  }
-}
+# locals {
+#   rke2_worker_machine_configs = [for config in rancher2_machine_config_v2.rke2-worker :
+#     {
+#       kind = config.kind
+#       name = config.name
+#     }
+#   ]
+# }
+
+# # Create a new rancher v2 amazonec2 RKE2 Cluster v2
+# resource "rancher2_cluster_v2" "rke2" {
+#   provider                                 = rancher2.admin
+#   name                                     = "rke2-on-ec2"
+#   kubernetes_version                       = "v1.24.4+rke2r1"
+#   enable_network_policy                    = false
+#   default_cluster_role_for_project_members = "user"
+#   rke_config {
+#     machine_pools {
+#       name                         = "master"
+#       cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
+#       control_plane_role           = true
+#       etcd_role                    = true
+#       worker_role                  = false
+#       quantity                     = 1
+#       machine_config {
+#         kind = rancher2_machine_config_v2.rke2-master[0].kind
+#         name = rancher2_machine_config_v2.rke2-master[0].name
+#       }
+#     }
+#     machine_pools {
+#       name                         = "worker-a"
+#       cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
+#       control_plane_role           = false
+#       etcd_role                    = false
+#       worker_role                  = true
+#       quantity                     = 1
+#       machine_config {
+#         kind = rancher2_machine_config_v2.rke2-worker[0].kind
+#         name = rancher2_machine_config_v2.rke2-worker[0].name
+#       }
+#     }
+#     machine_pools {
+#       name                         = "worker-b"
+#       cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
+#       control_plane_role           = false
+#       etcd_role                    = false
+#       worker_role                  = true
+#       quantity                     = 1
+#       machine_config {
+#         kind = rancher2_machine_config_v2.rke2-worker[1].kind
+#         name = rancher2_machine_config_v2.rke2-worker[1].name
+#       }
+#     }
+#     machine_pools {
+#       name                         = "worker-c"
+#       cloud_credential_secret_name = rancher2_cloud_credential.my_aws.id
+#       control_plane_role           = false
+#       etcd_role                    = false
+#       worker_role                  = true
+#       quantity                     = 1
+#       machine_config {
+#         kind = rancher2_machine_config_v2.rke2-worker[2].kind
+#         name = rancher2_machine_config_v2.rke2-worker[2].name
+#       }
+#     }
+#     machine_selector_config {
+#       config = {
+#         cloud-provider-name = "aws"
+#       }
+#     }
+#   }
+# }
 
 
-# Creating Amazon EFS File system
-resource "aws_efs_file_system" "rke2_efs" {
-  lifecycle_policy {
-    transition_to_ia = "AFTER_30_DAYS"
-  }
-  tags = {
-    Owner = var.tag_owner
-  }
-}
+# # Creating Amazon EFS File system
+# resource "aws_efs_file_system" "rke2_efs" {
+#   lifecycle_policy {
+#     transition_to_ia = "AFTER_30_DAYS"
+#   }
+#   tags = {
+#     Owner = var.tag_owner
+#   }
+# }
 
-# Creating the EFS access point for AWS EFS File system
-resource "aws_efs_access_point" "rke2_efs_ap" {
-  file_system_id = aws_efs_file_system.rke2_efs.id
-}
+# # Creating the EFS access point for AWS EFS File system
+# resource "aws_efs_access_point" "rke2_efs_ap" {
+#   file_system_id = aws_efs_file_system.rke2_efs.id
+# }
 
+<<<<<<< Updated upstream
 # Creating the AWS EFS System policy to transition files into and out of the file system.
 resource "aws_efs_file_system_policy" "policy" {
   file_system_id = aws_efs_file_system.rke2_efs.id
@@ -415,6 +460,48 @@ resource "aws_efs_mount_target" "rke2_efs_mount" {
   file_system_id = aws_efs_file_system.rke2_efs.id
   subnet_id      = module.vpc.public_subnets[count.index]
 }
+=======
+# # Creating the AWS EFS System policy to transition files into and out of the file system.
+# resource "aws_efs_file_system_policy" "policy" {
+#   file_system_id = aws_efs_file_system.rke2_efs.id
+#   # The EFS System Policy allows clients to mount, read and perform 
+#   # write operations on File system 
+#   # The communication of client and EFS is set using aws:secureTransport Option
+#   policy = <<POLICY
+# {
+#     "Version": "2012-10-17",
+#     "Id": "Policy01",
+#     "Statement": [
+#         {
+#             "Sid": "Statement",
+#             "Effect": "Allow",
+#             "Principal": {
+#                 "AWS": "*"
+#             },
+#             "Resource": "${aws_efs_file_system.rke2_efs.arn}",
+#             "Action": [
+#                 "elasticfilesystem:ClientMount",
+#                 "elasticfilesystem:ClientRootAccess",
+#                 "elasticfilesystem:ClientWrite"
+#             ],
+#             "Condition": {
+#                 "Bool": {
+#                     "aws:SecureTransport": "false"
+#                 }
+#             }
+#         }
+#     ]
+# }
+# POLICY
+# }
+# # Creating the AWS EFS Mount point in a specified Subnet 
+# # AWS EFS Mount point uses File system ID to launch.
+# resource "aws_efs_mount_target" "rke2_efs_mount" {
+#   count          = length(module.vpc.private_subnets)
+#   file_system_id = aws_efs_file_system.rke2_efs.id
+#   subnet_id      = module.vpc.private_subnets[count.index]
+# }
+>>>>>>> Stashed changes
 
 # https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html
 
