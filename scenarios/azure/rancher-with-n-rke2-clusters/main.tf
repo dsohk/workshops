@@ -272,7 +272,7 @@ resource "rancher2_cluster_sync" "cluster_sync" {
 # kubeconfig file for RKE2 clusters
 resource "local_file" "rke2_clusters_kubeconfig" {
   count           = var.no_of_downstream_clusters
-  filename        = format("${path.module}/kubeconfig-rke2-cluster%d.yaml", count.index + 1)
+  filename        = format("${path.module}/kubeconfig-cluster%d.yaml", count.index + 1)
   content         = rancher2_cluster_sync.cluster_sync[count.index].kube_config
   file_permission = "0600"
 }

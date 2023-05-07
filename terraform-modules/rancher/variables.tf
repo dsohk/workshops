@@ -27,13 +27,21 @@ variable "ssh_private_key_pem" {
 variable "cert_manager_version" {
   type        = string
   description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.7.1"
+  default     = "1.10.0"
 }
+
+variable "rancher_helm_repo" {
+  type        = string
+  description = "Rancher helm chart repository URL"
+  # default     = "https://releases.rancher.com/server-charts/latest"
+  default     = "https://charts.rancher.com/server-charts/prime"
+}
+
 
 variable "rancher_version" {
   type        = string
   description = "Rancher server version (format v0.0.0)"
-  default     = "v2.6.9"
+  default     = "v2.7.0"
 }
 
 # Required
