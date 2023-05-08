@@ -79,6 +79,11 @@ resource "helm_release" "rancher_server" {
   }
 
   set {
+    name  = "global.cattle.psp.enabled"
+    value = "false"
+  }
+
+  set {
     name  = "bootstrapPassword"
     value = var.rancher_server_bootstrap_password # TODO: change this once the terraform provider has been updated with the new pw bootstrap logic
   }
