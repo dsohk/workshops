@@ -286,7 +286,7 @@ resource "rancher2_app_v2" "longhorn" {
   namespace     = "longhorn-system"
   repo_name     = "rancher-charts"
   chart_name    = "longhorn"
-  chart_version = "100.2.3+up1.3.2"
+  chart_version = "102.2.0+up1.4.1"
   values        = file(join("/", [path.module, "files/longhorn-values.yaml"]))
   timeouts {
     create = "30m"
