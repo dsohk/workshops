@@ -5,7 +5,7 @@ provider "azurerm" {
   client_id       = var.azure_client_id
   client_secret   = var.azure_client_secret
   tenant_id       = var.azure_tenant_id
-  version         = "=2.0.0" #Can be overide as you wish
+  version         = "2.88.1" #Can be overide as you wish
   features {}
 }
 
