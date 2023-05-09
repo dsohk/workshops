@@ -261,19 +261,12 @@ resource "rancher2_cluster_v2" "rke2_clusters" {
   default_cluster_role_for_project_members = "user"
 }
 
-# resource "rancher2_cluster_sync" "cluster_sync" {
-#   provider      = rancher2.admin
-#   count         = var.no_of_downstream_clusters
-#   cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
-#   wait_catalogs = true
-#   state_confirm = 24 # try to confirm the active state for 12 times x 5s-interval (2 min)
-# }
-
-# Wait for 10 mins till RKE2 cluster is fully initialized
-resource "time_sleep" "wait_rke2_cluster_initialized_for_10mins" {
-  count           = var.no_of_downstream_clusters
-  depends_on      = [rancher2_cluster_v2.rke2_clusters, azurerm_linux_virtual_machine.rke2_node]
-  create_duration = "360s"
+resource "rancher2_cluster_sync" "cluster_sync" {
+  provider      = rancher2.admin
+  count         = var.no_of_downstream_clusters
+  cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
+  wait_catalogs = true
+  state_confirm = 73 # try to confirm the active state for 73 times x 5s-interval (6 min)
 }
 
 # kubeconfig file for RKE2 clusters
