@@ -6,23 +6,23 @@ terraform {
     }
     local = {
       source  = "hashicorp/local"
-      version = "2.4.0"
+      version = "2.1.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "4.0.4"
+      version = "3.1.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.20.0"
+      version = "2.7.1"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.9.0"
+      version = "2.4.1"
     }
     rancher2 = {
       source  = "rancher/rancher2"
-      version = "3.0.0"
+      version = "1.24.2"
     }
   }
   required_version = ">= 0.14.9"
