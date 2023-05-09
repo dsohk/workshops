@@ -266,7 +266,7 @@ resource "rancher2_cluster_sync" "cluster_sync" {
   count         = var.no_of_downstream_clusters
   cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
   wait_catalogs = true
-  state_confirm = 73 # try to confirm the active state for 73 times x 5s-interval (6 min)
+  state_confirm = "24" # try to confirm the active state for 24 times x 5s-interval (2 min)
 }
 
 # kubeconfig file for RKE2 clusters
