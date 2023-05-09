@@ -5,7 +5,7 @@ provider "azurerm" {
   tenant_id       = var.azure_tenant_id
   client_id       = var.azure_client_id
   client_secret   = var.azure_client_secret
-
+  version = "=2.88.1"
 }
 
 provider "tls" {
