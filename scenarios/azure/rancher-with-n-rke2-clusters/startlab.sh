@@ -1,6 +1,7 @@
 #! /bin/bash -ex
 
 # Run this in Azure Cloud Shell
+export LC_ALL=en_US.UTF-8
 
 # Always Download and install terraform
 TF_VERSION=1.1.6
@@ -59,5 +60,6 @@ terraform fmt
 terraform init
 touch ./kube_config_server.yaml
 terraform plan
-TF_LOG=DEBUG terraform apply --auto-approve
+#TF_LOG=DEBUG terraform apply --auto-approve
+terraform apply --auto-approve
 terraform output -json > ./output.json
