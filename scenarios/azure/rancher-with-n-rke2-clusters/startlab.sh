@@ -1,6 +1,7 @@
 #! /bin/bash -ex
 
 # Run this in Azure Cloud Shell
+export LC_ALL=en_US.UTF-8
 
 # Always Download and install terraform
 TF_VERSION=1.1.6
