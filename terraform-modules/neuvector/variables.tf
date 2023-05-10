@@ -15,13 +15,13 @@ variable "neuvector_sslcert_path" {
 variable "neuvector_helm_chart_version" {
   type        = string
   description = "Version of neuvector to install (format: 0.0.0)"
-  default     = "2.2.2"
+  default     = "2.4.3"
 }
 
 variable "neuvector_version" {
   type        = string
   description = "Version of neuvector to install (format: 0.0.0)"
-  default     = "5.0.2"
+  default     = "5.1.2"
 }
 
 variable "ingress_host" {

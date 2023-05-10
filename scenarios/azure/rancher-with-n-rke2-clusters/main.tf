@@ -256,7 +256,7 @@ resource "rancher2_cluster_v2" "rke2_clusters" {
   count    = var.no_of_downstream_clusters
   provider = rancher2.admin
   name                                     = format("cluster%d", count.index + 1)
-  kubernetes_version                       = "v1.24.4+rke2r1" # use the tags in here: https://hub.docker.com/r/rancher/system-agent-installer-rke2/tags
+  kubernetes_version                       = "v1.25.9+rke2r1" # use the tags in here: https://hub.docker.com/r/rancher/system-agent-installer-rke2/tags
   enable_network_policy                    = false
   default_cluster_role_for_project_members = "user"
 }
@@ -266,7 +266,7 @@ resource "rancher2_cluster_sync" "cluster_sync" {
   count         = var.no_of_downstream_clusters
   cluster_id    = rancher2_cluster_v2.rke2_clusters[count.index].cluster_v1_id
   wait_catalogs = true
-  state_confirm = 24 # try to confirm the active state for 12 times x 5s-interval (2 min)
+  state_confirm = "24" # try to confirm the active state for 24 times x 5s-interval (2 min)
 }
 
 # kubeconfig file for RKE2 clusters
@@ -286,7 +286,7 @@ resource "rancher2_app_v2" "longhorn" {
   namespace     = "longhorn-system"
   repo_name     = "rancher-charts"
   chart_name    = "longhorn"
-  chart_version = "100.2.3+up1.3.2"
+  chart_version = "102.2.0+up1.4.1"
   values        = file(join("/", [path.module, "files/longhorn-values.yaml"]))
   timeouts {
     create = "30m"

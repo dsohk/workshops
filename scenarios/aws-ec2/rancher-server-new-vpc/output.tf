@@ -11,6 +11,14 @@ output "rancher_server_bootstrap_password" {
   sensitive = true
 }
 
-output "fsid" {
-  value = aws_efs_file_system.rke2_efs.id
+output "aws_instance_profile_master" {
+  value = module.aws_iam_rke.rke_master_iam_instance_profile
 }
+
+output "aws_instance_profile_worker" {
+  value = module.aws_iam_rke.rke_worker_iam_instance_profile
+}
+
+# output "fsid" {
+#   value = aws_efs_file_system.rke2_efs.id
+# }
