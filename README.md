@@ -5,7 +5,8 @@ This repository contains a collection of terraform scripts to help you provision
 ## System Requirements
 
 1. terraform
-2. helm
+2. terraform-docs
+3. helm
 
 ## Start my Rancher Server on the Cloud
 
@@ -33,5 +34,6 @@ https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-
 
 ## Reference
 
-This repository starts from referring to [`rancher-quickstart`](https://github.com/rancher/quickstart) project and evolves from there. 
+[`rancher-quickstart`](https://github.com/rancher/quickstart)
+
 
