@@ -30,6 +30,18 @@ variable "tag_owner" {
   default     = "demo"
 }
 
+variable "rancher_version" {
+  type        = string
+  description = "Rancher server version (format: v0.0.0)"
+  default     = "v2.7.0"
+}
+
+variable "cert_manager_version" {
+  type        = string
+  description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
+  default     = "1.10.0"
+}
+
 variable "linux_master_instance_type" {
   type        = string
   description = "Instance type used for all EC2 instances"
@@ -48,17 +60,7 @@ variable "windows_instance_type" {
   default     = "t3a.xlarge"
 }
 
-variable "rancher_version" {
-  type        = string
-  description = "Rancher server version (format: v0.0.0)"
-  default     = "v2.7.0"
-}
 
-variable "cert_manager_version" {
-  type        = string
-  description = "Version of cert-manager to install alongside Rancher (format: 0.0.0)"
-  default     = "1.10.0"
-}
 
 # Required
 variable "add_windows_node" {
