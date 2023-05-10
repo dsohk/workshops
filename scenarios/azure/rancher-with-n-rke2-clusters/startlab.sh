@@ -59,5 +59,6 @@ terraform fmt
 terraform init
 touch ./kube_config_server.yaml
 terraform plan
-TF_LOG=DEBUG terraform apply --auto-approve
+#TF_LOG=DEBUG terraform apply --auto-approve
+terraform apply --auto-approve
 terraform output -json > ./output.json

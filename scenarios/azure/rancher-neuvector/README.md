@@ -15,7 +15,7 @@ This terraform script will build out an environment as follows.
 Login to your Azure portal, start the [Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/overview) with bash environment, run the following command to start the lab.
 
 ```
-git clone https://github.com/dsohk/workshops
+git clone https://github.com/akiliuhk/workshops
 cd workshops/scenarios/azure/rancher-neuvector
 ./startlab.sh
 ```
