@@ -1,0 +1,20 @@
+#cloud-config
+
+# SUSEConnect --url=${scc_url} -e ${scc_reg_email} -r ${scc_reg_code}
+# zypper in -t pattern -y kvm_server kvm_tools
+# systemctl enable libvirtd
+# systemctl start libvirtd
+runcmd:
+  - [ sudo, SUSEConnect, --url=${scc_url}, -e, ${scc_reg_email}, -r, ${scc_reg_code} ]
+
+packages:
+  - pattern_kvm_server
+  - pattern_kvm_tools
+
+final_message: |
+  cloud-init has finished
+  version: $version
+  timestamp: $timestamp
+  datasource: $datasource
+  uptime: $uptime
+
