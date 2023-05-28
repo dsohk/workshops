@@ -10,8 +10,8 @@ output "linux_server" {
 }
 
 output "linux_server_cockput_url" {
-  value   = [for ip in azurerm_linux_virtual_machine.linux_node.* :
-  "https://${instance.public_ip_address}:9090"]
+  value   = [for vm in azurerm_linux_virtual_machine.linux_node.* :
+  "https://${vm.public_ip_address}:9090"]
   description = "Cockpit Web UI URL"
 } 
 
