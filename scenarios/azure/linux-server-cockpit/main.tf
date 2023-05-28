@@ -91,7 +91,9 @@ resource "azurerm_linux_virtual_machine" "linux_node" {
       "echo 'Completed cloud-init!'",
       "sudo zypper ar -G -f https://download.opensuse.org/repositories/home:/ecsos:/server/15.4/ cockpit",
       "sudo zypper -n install -y cockpit",
-      "sudo systemctl enable --now cockpit.socket"
+      "sudo systemctl enable --now cockpit.socket",
+      "sudo systemctl enable --now docker.service",
+      "sudo systemctl start --now docker.service"
     ]
 
     connection {
