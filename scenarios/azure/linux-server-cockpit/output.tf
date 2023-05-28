@@ -10,7 +10,8 @@ output "linux_server" {
 }
 
 output "linux_server_cockput_url" {
-  value = [for no_of_servers  in azurerm_linux_virtual_machine.linux_node :
+  count   = var.no_of_servers
+  value   = [for count in azurerm_linux_virtual_machine.linux_node :
   "https://${instance.public_ip_address}:9090"]
   description = "Cockpit Web UI URL"
 } 
