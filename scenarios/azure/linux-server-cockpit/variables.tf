@@ -68,5 +68,5 @@ variable "server_size" {
 variable "no_of_servers" {
   type        = number
   description = "Specify number of servers"
-  default     = 2
+  default     = 1
 }
