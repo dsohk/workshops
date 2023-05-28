@@ -1,4 +1,4 @@
-output "linux_server" {
+/* output "linux_server" {
   sensitive = true
   value = [
     tomap({
@@ -7,7 +7,7 @@ output "linux_server" {
       "Password" = azurerm_linux_virtual_machine.linux_node.*.admin_password,
     })
   ]
-}
+} */
 
 output "linux_server_cockput_url" {
   value   = [for vm in azurerm_linux_virtual_machine.linux_node.* :
@@ -26,8 +26,8 @@ output "linux_server_password" {
   description = "Password"
 }
 
-output "linux_server_ip" {
+/* output "linux_server_ip" {
   value       = azurerm_linux_virtual_machine.linux_node.*.public_ip_address
   description = "Linux Server IP"
 }
-
+ */
