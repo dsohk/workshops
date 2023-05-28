@@ -2,7 +2,7 @@ output "linux_server" {
   sensitive = true
   value = [
     tomap({
-      "Linux_Server_IP" = azurerm_linux_virtual_machine.linux_node.*.public_ip_address,
+      "Linux_URL" = format("https://%d:9090", azurerm_linux_virtual_machine.linux_node.*.public_ip_address)
       "User" = azurerm_linux_virtual_machine.linux_node.*.admin_username,
       "Password" = azurerm_linux_virtual_machine.linux_node.*.admin_password,
     })
