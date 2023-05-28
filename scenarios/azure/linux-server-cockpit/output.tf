@@ -9,18 +9,23 @@
   ]
 } */
 
-output "cockpit_server_user" {
+output "linux_server_user" {
   value = azurerm_linux_virtual_machine.linux_node.*.admin_username
-  description = "user"
+  description = "User"
 }
 
-output "cockpit_server_password" {
+output "linux_server_password" {
   value     = azurerm_linux_virtual_machine.linux_node.*.admin_password
   sensitive = true
   description = "Password "
 }
 
-output "cockpit_webui_url" {
+output "linux_server_ip" {
+  value       = azurerm_linux_virtual_machine.linux_node.*.public_ip_address
+  description = "Linux Server IP"
+}
+
+output "linux_server_cockput_url" {
   value       = format("https://%s", azurerm_linux_virtual_machine.linux_node.*.public_ip_address)
   description = "Cockpit Web UI URL"
 }
