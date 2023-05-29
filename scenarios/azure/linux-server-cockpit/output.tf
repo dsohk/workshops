@@ -10,19 +10,18 @@
 } */
 
 output "linux_server_cockput_url" {
-  value   = [for vm in azurerm_linux_virtual_machine.linux_node.* :
-  "https://${vm.public_ip_address}:9090"]
-  description = "Cockpit Web UI URL"
+  value       = [for vm in azurerm_linux_virtual_machine.linux_node.* : "https://${vm.public_ip_address}:9090"]
+  description = "Linux Node Cockpit Web UI URL"
 } 
 
 output "linux_server_user" {
-  value = azurerm_linux_virtual_machine.linux_node.*.admin_username
+  value       = azurerm_linux_virtual_machine.linux_node.*.admin_username
   description = "User"
 }
 
 output "linux_server_password" {
-  value     = azurerm_linux_virtual_machine.linux_node.*.admin_password
-  sensitive = true
+  value       = azurerm_linux_virtual_machine.linux_node.*.admin_password
+  sensitive   = true
   description = "Password"
 }
 
