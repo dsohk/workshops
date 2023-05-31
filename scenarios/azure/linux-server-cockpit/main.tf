@@ -92,8 +92,8 @@ resource "azurerm_linux_virtual_machine" "linux_node" {
       "sudo zypper ar -G -f https://download.opensuse.org/repositories/home:/ecsos:/server/15.4/ cockpit",
       "sudo zypper -n install -y cockpit",
       "sudo systemctl enable --now cockpit.socket",
-      "sudo systemctl enable --now docker.service",
-      "sudo systemctl start --now docker.service"
+      #"sudo sed -ie \"s/PermitRootLogin yes/PermitRootLogin no/g\" /etc/ssh/sshd_config"
+      #"sudo systemctl restart sshd"
     ]
 
     connection {
