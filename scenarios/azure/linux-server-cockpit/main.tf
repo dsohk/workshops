@@ -28,7 +28,7 @@ resource "azurerm_subnet" "linux-subnet" {
 
 # Public IP of Linux server
 resource "azurerm_public_ip" "linux-nodes-pip" {
-  count               = length(var.server_config)
+  count               = var.no_of_servers
   name                = format("linux-node%d-pip", count.index + 1)
   location            = azurerm_resource_group.linux.location
   resource_group_name = azurerm_resource_group.linux.name
@@ -37,7 +37,7 @@ resource "azurerm_public_ip" "linux-nodes-pip" {
 
 # Azure network interface for linux server
 resource "azurerm_network_interface" "linux-nodes-nic" {
-  count               = length(var.server_config)
+  count               = var.no_of_servers
   name                = format("linux-node%d-nic", count.index + 1)
   location            = azurerm_resource_group.linux.location
   resource_group_name = azurerm_resource_group.linux.name
@@ -52,7 +52,7 @@ resource "azurerm_network_interface" "linux-nodes-nic" {
 
 # Rancher bootstrap password
 resource "random_password" "linux_server_password" {
-  count            = length(var.server_config)
+  count            = var.no_of_servers
   length           = 12
   special          = true
   override_special = "_%@"
@@ -60,13 +60,13 @@ resource "random_password" "linux_server_password" {
 
 # Azure linux virtual machine
 resource "azurerm_linux_virtual_machine" "linux_node" {
-  count                           = length(var.server_config)
-  name                            = var.server_config[count.index].name
+  count                           = var.no_of_servers
+  name                            = format("${var.prefix}-linux-node%d", count.index + 1)
   computer_name                   = format("linux-node%d", count.index + 1) // ensure computer_name meets 15 character limit
   location                        = azurerm_resource_group.linux.location
   resource_group_name             = azurerm_resource_group.linux.name
   network_interface_ids           = [azurerm_network_interface.linux-nodes-nic[count.index].id]
-  size                            = var.server_config[count.index].size
+  size                            = var.server_size
   admin_username                  = local.node_username
   admin_password                  = random_password.linux_server_password[count.index].result
   disable_password_authentication = false
