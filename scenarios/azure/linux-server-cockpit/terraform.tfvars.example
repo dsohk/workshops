@@ -9,3 +9,7 @@ no_of_servers           = 2
 prefix                = "lab"
 resource_group_name   = "attendee1"
 tag_resource_owner    = "you@email.com"
+server_config = [
+  { name = "rancher",  size = "Standard_D4s_v4" },
+  { name = "cluster1", size = "Standard_D8s_v4" }
+]
