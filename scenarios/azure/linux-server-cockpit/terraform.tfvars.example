@@ -5,7 +5,11 @@ azure_client_id       = ""
 azure_client_secret   = ""
 azure_location        = "Central India"
 use_static_public_ip =  true
-no_of_servers           = 2
+no_of_servers           = 1
 prefix                = "lab"
 resource_group_name   = "attendee1"
 tag_resource_owner    = "you@email.com"
+server_config = [
+  { name = "rancher",  size = "Standard_D4s_v4" },
+  { name = "cluster1", size = "Standard_D8s_v4" }
+]
