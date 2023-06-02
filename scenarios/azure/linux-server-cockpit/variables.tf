@@ -59,14 +59,16 @@ locals {
 # pricing: https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
 # $0.0622/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD) - Standard_D2as_v4
 # $0.0896/hour Central India (2 vCPU AMD, 8GB RAM, 16GB SSD) - Standard_B2ms
-variable "server_size" {
-  type        = string
-  description = "Instance type used for all linux virtual machines"
-  default     = "Standard_D4s_v4"
+
+# server configuration (hostname and size)
+variable "server_config" {
+  type = list(object({
+    name = string
+    size = string
+  }))
+  default = [
+    { name = "rancher", size = "Standard_D4s_v4" },
+    { name = "server1", size = "Standard_D4s_v4" }
+  ]
 }
 
-variable "no_of_servers" {
-  type        = number
-  description = "Specify number of servers"
-  default     = 1
-}
