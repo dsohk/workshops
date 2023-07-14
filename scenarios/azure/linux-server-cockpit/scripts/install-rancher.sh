@@ -38,14 +38,15 @@ done
 echo "Your RKE2 cluster is ready!"
 kubectl get node
 
-echo "Install Cert Manager v1.10.0 ..."
-kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.10.0/cert-manager.crds.yaml
+echo "Install Cert Manager v1.11.4 ..."
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.4/cert-manager.crds.yaml
 helm repo add jetstack https://charts.jetstack.io
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.10.0 \
+  --version v1.11.4 \
   --create-namespace
+  
 kubectl -n cert-manager rollout status deploy/cert-manager
 
 # Wait until cert-manager deployment complete
@@ -61,17 +62,19 @@ done
 echo "Install Rancher ${RANCHER_VERSION} ..."
 RANCHER_IP=`curl -qs http://checkip.amazonaws.com`
 RANCHER_FQDN=rancher.$RANCHER_IP.sslip.io
-RANCHER_VERSION=v2.7.3
+RANCHER_VERSION=v2.7.4-ent
 
-helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm repo add rancher-prime https://charts.rancher.cn/2.7-prime/latest
+helm repo update
 
-
-helm install rancher rancher-latest/rancher \
+helm upgrade --install rancher rancher-prime/rancher \
   --namespace cattle-system \
   --set hostname=$RANCHER_FQDN \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false \
-  --version ${RANCHER_VERSION} --devel \
+  --set rancherImage=harbor.13.228.163.47.sslip.io/prime/rancher \
+  --set systemDefaultRegistry=harbor.13.228.163.47.sslip.io \
+  --version ${RANCHER_VERSION} \
   --create-namespace
 
 echo "Wait until cattle-system deployment finish ..."
