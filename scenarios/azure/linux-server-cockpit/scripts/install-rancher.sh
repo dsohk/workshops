@@ -64,7 +64,7 @@ RANCHER_IP=`curl -qs http://checkip.amazonaws.com`
 RANCHER_FQDN=rancher.$RANCHER_IP.sslip.io
 RANCHER_VERSION=v2.7.5-ent
 
-helm repo add rancher-prime https://charts.rancher.cn/2.7-prime/latest
+helm repo add rancher-prime https://pandaria-releases.oss-cn-beijing.aliyuncs.com/2.7-prime/latest
 helm repo update
 
 helm upgrade --install rancher rancher-prime/rancher \
