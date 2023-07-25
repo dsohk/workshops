@@ -62,7 +62,7 @@ done
 echo "Install Rancher ${RANCHER_VERSION} ..."
 RANCHER_IP=`curl -qs http://checkip.amazonaws.com`
 RANCHER_FQDN=rancher.$RANCHER_IP.sslip.io
-RANCHER_VERSION=v2.7.4-ent
+RANCHER_VERSION=v2.7.5-ent
 
 helm repo add rancher-prime https://pandaria-releases.oss-cn-beijing.aliyuncs.com/2.7-prime/latest
 helm repo update
