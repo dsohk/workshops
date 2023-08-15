@@ -38,13 +38,13 @@ done
 echo "Your RKE2 cluster is ready!"
 kubectl get node
 
-echo "Install Cert Manager v1.11.3 ..."
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.3/cert-manager.crds.yaml
+echo "Install Cert Manager v1.11.4 ..."
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.11.4/cert-manager.crds.yaml
 helm repo add jetstack https://charts.jetstack.io
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.11.3 \
+  --version v1.11.4 \
   --create-namespace
   
 kubectl -n cert-manager rollout status deploy/cert-manager
@@ -72,8 +72,8 @@ helm upgrade --install rancher rancher-prime/rancher \
   --set hostname=$RANCHER_FQDN \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false \
-  --set rancherImage=harbor.13.228.163.47.sslip.io/prime/rancher \
-  --set systemDefaultRegistry=harbor.13.228.163.47.sslip.io \
+  --set rancherImage=harbor.suse.sstech.cloud/prime/rancher \
+  --set systemDefaultRegistry=harbor.suse.sstech.cloud/ \
   --version ${RANCHER_VERSION} \
   --create-namespace
 
