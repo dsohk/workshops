@@ -57,7 +57,7 @@ resource "random_password" "linux_server_password" {
   min_upper        = 2
   min_lower        = 2
   min_special      = 2
-  number           = true
+  numeric          = true
   special          = true
   override_special = "_!@#$%&"
 }
