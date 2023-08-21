@@ -72,8 +72,8 @@ helm upgrade --install rancher rancher-prime/rancher \
   --set hostname=$RANCHER_FQDN \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false \
-  --set rancherImage=harbor.suse.sstech.cloud/prime/rancher \
-  --set systemDefaultRegistry=harbor.suse.sstech.cloud/ \
+  --set rancherImage=harbor.13.228.163.47.sslip.io/prime/rancher \
+  --set systemDefaultRegistry=harbor.13.228.163.47.sslip.io \
   --version ${RANCHER_VERSION} \
   --create-namespace
 
