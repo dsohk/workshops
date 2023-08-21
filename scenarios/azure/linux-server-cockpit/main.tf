@@ -53,10 +53,11 @@ resource "azurerm_network_interface" "linux-nodes-nic" {
 # Rancher bootstrap password
 resource "random_password" "linux_server_password" {
   count            = length(var.server_config)
-  length           = 12
+  length           = 16
   min_upper        = 2
   min_lower        = 2
   min_special      = 2
+  min_numeric      = 2
   numeric          = true
   special          = true
   override_special = "_!@#$%&"
