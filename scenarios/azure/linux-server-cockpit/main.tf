@@ -60,7 +60,7 @@ resource "random_password" "linux_server_password" {
   min_numeric      = 2
   numeric          = true
   special          = true
-  override_special = "_!@#$%&"
+  override_special = "_!@#$%"
 }
 
 # Azure linux virtual machine
