@@ -11,8 +11,8 @@ do
   status=$?
   if [ $status -ne 0 ]; then
     echo "terraform apply failed with exit code: $status "
-    echo "retrying after 15s ..."
-    sleep 15s
+    echo "retrying after 300s ..."
+    sleep 300s
     retry=$(( $retry + 1 ))
   else
     break
