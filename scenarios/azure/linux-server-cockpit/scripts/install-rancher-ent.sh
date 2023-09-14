@@ -62,16 +62,18 @@ done
 echo "Install Rancher ${RANCHER_VERSION} ..."
 RANCHER_IP=`curl -qs http://checkip.amazonaws.com`
 RANCHER_FQDN=rancher.$RANCHER_IP.sslip.io
-RANCHER_VERSION=v2.7.6
+RANCHER_VERSION=v2.7.5-ent
 
-helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm repo add rancher-prime https://pandaria-releases.oss-cn-beijing.aliyuncs.com/2.7-prime/latest
 helm repo update
 
-helm upgrade --install rancher rancher-latest/rancher \
+helm upgrade --install rancher rancher-prime/rancher \
   --namespace cattle-system \
   --set hostname=$RANCHER_FQDN \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false \
+  --set rancherImage=harbor.13.228.163.47.sslip.io/prime/rancher \
+  --set systemDefaultRegistry=harbor.13.228.163.47.sslip.io \
   --version ${RANCHER_VERSION} \
   --create-namespace
 
